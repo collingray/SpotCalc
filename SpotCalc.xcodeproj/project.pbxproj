@@ -1,0 +1,672 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */; };
+		F0F1F4C92BF93E9F0016C79B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* ContentView.swift */; };
+		F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */; };
+		F0F1F4CE2BF93E9F0016C79B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CD2BF93E9F0016C79B /* Preview Assets.xcassets */; };
+		F0F1F4D92BF93EA00016C79B /* SpotCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4D82BF93EA00016C79B /* SpotCalcTests.swift */; };
+		F0F1F4E32BF93EA00016C79B /* SpotCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4E22BF93EA00016C79B /* SpotCalcUITests.swift */; };
+		F0F1F4E52BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4E42BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift */; };
+		F0F1F4F42BF96A8A0016C79B /* LaTeXSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4F32BF96A8A0016C79B /* LaTeXSwiftUI */; };
+		F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */; };
+		F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */; };
+		F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */; };
+		F0F1F4FD2BF99E1C0016C79B /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4FC2BF99E1C0016C79B /* ComplexModule */; };
+		F0F1F4FF2BF99E1C0016C79B /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4FE2BF99E1C0016C79B /* Numerics */; };
+		F0F1F5012BF99E1C0016C79B /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F5002BF99E1C0016C79B /* RealModule */; };
+		F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */; };
+		F0F1F5052BF9A4BA0016C79B /* ExpressionParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F0F1F4D52BF93EA00016C79B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0F1F4BB2BF93E9F0016C79B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0F1F4C22BF93E9F0016C79B;
+			remoteInfo = SpotCalc;
+		};
+		F0F1F4DF2BF93EA00016C79B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F0F1F4BB2BF93E9F0016C79B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F0F1F4C22BF93E9F0016C79B;
+			remoteInfo = SpotCalc;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
+		F0F1F4C82BF93E9F0016C79B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F0F1F4CD2BF93E9F0016C79B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpotCalc.entitlements; sourceTree = "<group>"; };
+		F0F1F4D42BF93EA00016C79B /* SpotCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0F1F4D82BF93EA00016C79B /* SpotCalcTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcTests.swift; sourceTree = "<group>"; };
+		F0F1F4DE2BF93EA00016C79B /* SpotCalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotCalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0F1F4E22BF93EA00016C79B /* SpotCalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcUITests.swift; sourceTree = "<group>"; };
+		F0F1F4E42BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F0F1F4F12BF940BD0016C79B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionsView.swift; sourceTree = "<group>"; };
+		F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGradient.swift; sourceTree = "<group>"; };
+		F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionTypes.swift; sourceTree = "<group>"; };
+		F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParser.swift; sourceTree = "<group>"; };
+		F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParserTest.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F0F1F4C02BF93E9F0016C79B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0F1F5012BF99E1C0016C79B /* RealModule in Frameworks */,
+				F0F1F4F42BF96A8A0016C79B /* LaTeXSwiftUI in Frameworks */,
+				F0F1F4FF2BF99E1C0016C79B /* Numerics in Frameworks */,
+				F0F1F4FD2BF99E1C0016C79B /* ComplexModule in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4D12BF93EA00016C79B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4DB2BF93EA00016C79B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F0F1F4BA2BF93E9F0016C79B = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4C52BF93E9F0016C79B /* SpotCalc */,
+				F0F1F4D72BF93EA00016C79B /* SpotCalcTests */,
+				F0F1F4E12BF93EA00016C79B /* SpotCalcUITests */,
+				F0F1F4C42BF93E9F0016C79B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F0F1F4C42BF93E9F0016C79B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */,
+				F0F1F4D42BF93EA00016C79B /* SpotCalcTests.xctest */,
+				F0F1F4DE2BF93EA00016C79B /* SpotCalcUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F0F1F4C52BF93E9F0016C79B /* SpotCalc */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4F12BF940BD0016C79B /* Info.plist */,
+				F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */,
+				F0F1F4C82BF93E9F0016C79B /* ContentView.swift */,
+				F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */,
+				F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */,
+				F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */,
+				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
+				F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */,
+				F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */,
+				F0F1F4CC2BF93E9F0016C79B /* Preview Content */,
+			);
+			path = SpotCalc;
+			sourceTree = "<group>";
+		};
+		F0F1F4CC2BF93E9F0016C79B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4CD2BF93E9F0016C79B /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F0F1F4D72BF93EA00016C79B /* SpotCalcTests */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4D82BF93EA00016C79B /* SpotCalcTests.swift */,
+				F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */,
+			);
+			path = SpotCalcTests;
+			sourceTree = "<group>";
+		};
+		F0F1F4E12BF93EA00016C79B /* SpotCalcUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4E22BF93EA00016C79B /* SpotCalcUITests.swift */,
+				F0F1F4E42BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift */,
+			);
+			path = SpotCalcUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F0F1F4C22BF93E9F0016C79B /* SpotCalc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0F1F4E82BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalc" */;
+			buildPhases = (
+				F0F1F4BF2BF93E9F0016C79B /* Sources */,
+				F0F1F4C02BF93E9F0016C79B /* Frameworks */,
+				F0F1F4C12BF93E9F0016C79B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpotCalc;
+			packageProductDependencies = (
+				F0F1F4F32BF96A8A0016C79B /* LaTeXSwiftUI */,
+				F0F1F4FC2BF99E1C0016C79B /* ComplexModule */,
+				F0F1F4FE2BF99E1C0016C79B /* Numerics */,
+				F0F1F5002BF99E1C0016C79B /* RealModule */,
+			);
+			productName = SpotCalc;
+			productReference = F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F0F1F4D32BF93EA00016C79B /* SpotCalcTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0F1F4EB2BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalcTests" */;
+			buildPhases = (
+				F0F1F4D02BF93EA00016C79B /* Sources */,
+				F0F1F4D12BF93EA00016C79B /* Frameworks */,
+				F0F1F4D22BF93EA00016C79B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0F1F4D62BF93EA00016C79B /* PBXTargetDependency */,
+			);
+			name = SpotCalcTests;
+			productName = SpotCalcTests;
+			productReference = F0F1F4D42BF93EA00016C79B /* SpotCalcTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F0F1F4DD2BF93EA00016C79B /* SpotCalcUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F0F1F4EE2BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalcUITests" */;
+			buildPhases = (
+				F0F1F4DA2BF93EA00016C79B /* Sources */,
+				F0F1F4DB2BF93EA00016C79B /* Frameworks */,
+				F0F1F4DC2BF93EA00016C79B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F0F1F4E02BF93EA00016C79B /* PBXTargetDependency */,
+			);
+			name = SpotCalcUITests;
+			productName = SpotCalcUITests;
+			productReference = F0F1F4DE2BF93EA00016C79B /* SpotCalcUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F0F1F4BB2BF93E9F0016C79B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					F0F1F4C22BF93E9F0016C79B = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					F0F1F4D32BF93EA00016C79B = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = F0F1F4C22BF93E9F0016C79B;
+					};
+					F0F1F4DD2BF93EA00016C79B = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = F0F1F4C22BF93E9F0016C79B;
+					};
+				};
+			};
+			buildConfigurationList = F0F1F4BE2BF93E9F0016C79B /* Build configuration list for PBXProject "SpotCalc" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F0F1F4BA2BF93E9F0016C79B;
+			packageReferences = (
+				F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
+				F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */,
+			);
+			productRefGroup = F0F1F4C42BF93E9F0016C79B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F0F1F4C22BF93E9F0016C79B /* SpotCalc */,
+				F0F1F4D32BF93EA00016C79B /* SpotCalcTests */,
+				F0F1F4DD2BF93EA00016C79B /* SpotCalcUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F0F1F4C12BF93E9F0016C79B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0F1F4CE2BF93E9F0016C79B /* Preview Assets.xcassets in Resources */,
+				F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4D22BF93EA00016C79B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4DC2BF93EA00016C79B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F0F1F4BF2BF93E9F0016C79B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */,
+				F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */,
+				F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */,
+				F0F1F4C92BF93E9F0016C79B /* ContentView.swift in Sources */,
+				F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */,
+				F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4D02BF93EA00016C79B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0F1F5052BF9A4BA0016C79B /* ExpressionParserTest.swift in Sources */,
+				F0F1F4D92BF93EA00016C79B /* SpotCalcTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0F1F4DA2BF93EA00016C79B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F0F1F4E52BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift in Sources */,
+				F0F1F4E32BF93EA00016C79B /* SpotCalcUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F0F1F4D62BF93EA00016C79B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0F1F4C22BF93E9F0016C79B /* SpotCalc */;
+			targetProxy = F0F1F4D52BF93EA00016C79B /* PBXContainerItemProxy */;
+		};
+		F0F1F4E02BF93EA00016C79B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F0F1F4C22BF93E9F0016C79B /* SpotCalc */;
+			targetProxy = F0F1F4DF2BF93EA00016C79B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		F0F1F4E62BF93EA00016C79B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F0F1F4E72BF93EA00016C79B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		F0F1F4E92BF93EA00016C79B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpotCalc/SpotCalc.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
+				DEVELOPMENT_TEAM = CSG84864FN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpotCalc/Info.plist;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Needed to use hotkey";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalc;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F0F1F4EA2BF93EA00016C79B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SpotCalc/SpotCalc.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
+				DEVELOPMENT_TEAM = CSG84864FN;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SpotCalc/Info.plist;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Needed to use hotkey";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalc;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F0F1F4EC2BF93EA00016C79B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSG84864FN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalcTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotCalc.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SpotCalc";
+			};
+			name = Debug;
+		};
+		F0F1F4ED2BF93EA00016C79B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSG84864FN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalcTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotCalc.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SpotCalc";
+			};
+			name = Release;
+		};
+		F0F1F4EF2BF93EA00016C79B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSG84864FN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalcUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SpotCalc;
+			};
+			name = Debug;
+		};
+		F0F1F4F02BF93EA00016C79B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CSG84864FN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = sh.collin.SpotCalcUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = SpotCalc;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F0F1F4BE2BF93E9F0016C79B /* Build configuration list for PBXProject "SpotCalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0F1F4E62BF93EA00016C79B /* Debug */,
+				F0F1F4E72BF93EA00016C79B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0F1F4E82BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0F1F4E92BF93EA00016C79B /* Debug */,
+				F0F1F4EA2BF93EA00016C79B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0F1F4EB2BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalcTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0F1F4EC2BF93EA00016C79B /* Debug */,
+				F0F1F4ED2BF93EA00016C79B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F0F1F4EE2BF93EA00016C79B /* Build configuration list for PBXNativeTarget "SpotCalcUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0F1F4EF2BF93EA00016C79B /* Debug */,
+				F0F1F4F02BF93EA00016C79B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/colinc86/LaTeXSwiftUI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F0F1F4F32BF96A8A0016C79B /* LaTeXSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */;
+			productName = LaTeXSwiftUI;
+		};
+		F0F1F4FC2BF99E1C0016C79B /* ComplexModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = ComplexModule;
+		};
+		F0F1F4FE2BF99E1C0016C79B /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
+		F0F1F5002BF99E1C0016C79B /* RealModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = RealModule;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F0F1F4BB2BF93E9F0016C79B /* Project object */;
+}
