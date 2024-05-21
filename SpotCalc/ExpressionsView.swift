@@ -1,58 +1,147 @@
 import SwiftUI
+import LaTeXSwiftUI
 
 struct ExpressionsView: View {
-    @Binding var expressions: [String]
+    @Binding var expressions: [ExpressionData]
     
     var body: some View {
         ForEach(Array($expressions.enumerated()), id: \.0) { i, expr in
-            HStack(alignment: .center) {
-                Spacer()
-                ExpressionView(expression: expr)
-                Spacer()
-                
-                Button(action: {
-                    expressions.remove(at: i)
-                }) {
-                    Image(systemName: "trash.circle.fill")
-                        .imageScale(.large)
-                        .padding([.trailing], 20)
-                }.buttonStyle(PlainButtonStyle())
+            ZStack {
+                ExpressionView(expression: expr, deleteExpression: {expressions.remove(at: i)})
+                    .padding([.top], 10)
+                    .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
             }
         }
     }
 }
 
 struct ExpressionView: View {
-    @Binding var expression: String
+    @Binding var expression: ExpressionData
+    let deleteExpression: () -> ()
     
+    @State var hovered: Bool = false
     @State var editing: Bool = false
     @State var editingText: String = ""
+    @FocusState var textFieldFocused: Bool
     
     var body: some View {
-        HStack {
-            if editing {
-                TextField("", text: $editingText)
-                    .padding()
+        ZStack {
+            HStack {
+                if editing {
+                    TextField("", text: $editingText, onEditingChanged: { beganEditing in
+                        if !beganEditing {
+                            editing = false
+                        }
+                    })
+                    .focused($textFieldFocused)
                     .textFieldStyle(.plain)
                     .font(.title)
-//                    .frame(height: 50.0, alignment: .center)
                     .background(Color.clear)
                     .multilineTextAlignment(.center)
-//                    .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color.gray), alignment: .top)
                     .onSubmit {
                         if editingText != "" {
-                            expression = editingText
+                            expression.updateExpression(editingText)
                         }
                         editing = false
                     }
-            } else {
-                Text(expression)
-                    .font(.title)
-                    .onTapGesture(count: 2, perform: {
-                        editingText = expression
-                        editing = true
-                    })
+                    
+                } else {
+                    ZStack {
+                        HStack {
+                            if expression.variables.isEmpty {
+                                LaTeX("x_\(expression.num) =")
+                                    .parsingMode(.all)
+                                    .font(.title)
+                                    .foregroundStyle(.gray)
+                            } else {
+                                LaTeX("f_\(expression.num)(\(expression.variables.joined(separator: ", "))) =")
+                                    .parsingMode(.all)
+                                    .font(.title)
+                                    .foregroundStyle(.gray)
+                            }
+                            Spacer()
+                        }
+                        
+                        VStack {
+                            LaTeX(expression.displayString)
+                                .parsingMode(.all)
+                                .font(.title)
+                        }.onTapGesture(count: 2, perform: {
+                            if editingText == "" {
+                                editingText = expression.expressionString
+                            }
+                            editing = true
+                            textFieldFocused = true
+                        })
+                        
+                        HStack {
+                            Spacer()
+                            if let value = expression.displayValue {
+                                LaTeX("= \(value)")
+                                    .parsingMode(.all)
+                                    .font(.title)
+                                    .foregroundStyle(.gray)
+                                
+                            }
+                        }
+                    }
+                }
             }
-        }.frame(height: 30.0, alignment: .center)
+            
+            HStack(alignment: .center) {
+                if let graphColor = expression.graphColor {
+                    Circle()
+                        .fill()
+                        .foregroundStyle(graphColor)
+                        .frame(width: 5, height: 5)
+                        .padding(.leading, -7.0)
+                }
+                
+                Spacer()
+            }
+            
+            if hovered {
+                HStack(alignment: .center) {
+                    Spacer()
+                    
+                    Button(action: {
+                        if expression.isGraphed {
+                            expression.disableGraph()
+                        } else {
+                            expression.enableGraph()
+                        }
+                    }) {
+                        if let graphColor = expression.graphColor {
+                            Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .padding([.top, .trailing], 5)
+                                .foregroundStyle(graphColor)
+                        } else {
+                            Image(systemName: "chart.line.uptrend.xyaxis.circle")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .padding([.top, .trailing], 5)
+                        }
+                    }.buttonStyle(BorderlessButtonStyle())
+                    
+                    Button(action: {
+                        deleteExpression()
+                    }) {
+                        Image(systemName: "trash.circle.fill")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .padding([.top, .trailing], 5)
+                    }.buttonStyle(BorderlessButtonStyle())
+                }
+            }
+        }.onHover(perform: { hovering in
+            hovered = hovering
+        })
     }
 }
+
+
+//#Preview {
+//    MainView()
+//}

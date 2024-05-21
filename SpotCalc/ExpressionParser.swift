@@ -24,7 +24,7 @@ class Parser {
         (%|\\bmod\\b) |          # Modulus
         \\b(mph|hours|miles|km|kilometers|deg|degrees|radians|%)\\b | # Units and percentage
         (\\)) |                  # Implied multiplication (e.g., 2(8+1))
-        ([a-zA-Z]+)              # Variables (e.g., e, pi)
+        ([a-zA-Z]\\w*)              # Variables (e.g., e, pi)
         """
 
         let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .allowCommentsAndWhitespace])
@@ -120,15 +120,15 @@ class Parser {
     }
 
     private func parseExponentRecursively() throws -> Expression {
-        var exponent = try parseFunction()
+        var exponent = try parseAtom()
 
         if let token = currentToken, Parser.exponentSymbols.contains(token) {
             advance()
             let rhs = try parseExponentRecursively()
             
             switch token {
-            case "^": exponent = CaretExponent(x: exponent, y: rhs)
-            case "**": exponent = StarStarExponent(x: exponent, y: rhs)
+            case "^": exponent = Exponent(x: exponent, y: rhs)
+            case "**": exponent = Exponent(x: exponent, y: rhs)
             default: ()
             }
         }
@@ -137,50 +137,6 @@ class Parser {
     }
     
     static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round", "erf", "erfc"]
-    private func parseFunction() throws -> Expression {
-        if let token = currentToken, Parser.functionSymbols.contains(token) {
-            advance()
-            guard currentToken == "(" else {
-                throw ParserError.invalidSyntax
-            }
-            advance()
-            let function = try parseFunction()
-            guard currentToken == ")" else {
-                throw ParserError.invalidSyntax
-            }
-            advance()
-            
-            switch token {
-            case "abs": return AbsoluteValue(x: function)
-            case "log": return LogarithmBase10(x: function)
-            case "ln": return NaturalLogarithm(x: function)
-            case "exp": return Exponential(x: function)
-            case "sqrt": return SquareRoot(x: function)
-            case "cbrt": return CubeRoot(x: function)
-            case "sin": return Sine(x: function)
-            case "cos": return Cosine(x: function)
-            case "tan": return Tangent(x: function)
-            case "arcsin": return ArcSine(x: function)
-            case "arccos": return ArcCosine(x: function)
-            case "arctan": return ArcTangent(x: function)
-            case "sinh": return Sinh(x: function)
-            case "cosh": return Cosh(x: function)
-            case "tanh": return Tanh(x: function)
-            case "arcsinh": return ArcSinh(x: function)
-            case "arccosh": return ArcCosh(x: function)
-            case "arctanh": return ArcTanh(x: function)
-            case "ceil": return Ceiling(x: function)
-            case "floor": return Floor(x: function)
-            case "round": return Round(x: function)
-            case "erf": return Erf(x: function)
-            case "erfc": return Erfc(x: function)
-            default: ()
-            }
-        }
-
-        return try parseAtom()
-    }
-    
     static let variableRegex = /[a-zA-Z]\w*/
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
@@ -195,6 +151,44 @@ class Parser {
                 }
                 advance()
                 return Grouping(x: expr)
+            } else if Parser.functionSymbols.contains(token) {
+                advance()
+                guard currentToken == "(" else {
+                    throw ParserError.invalidSyntax
+                }
+                advance()
+                let expr = try parseExpression()
+                guard currentToken == ")" else {
+                    throw ParserError.invalidSyntax
+                }
+                advance()
+                
+                switch token {
+                case "abs": return AbsoluteValue(x: expr)
+                case "log": return LogarithmBase10(x: expr)
+                case "ln": return NaturalLogarithm(x: expr)
+                case "exp": return Exponential(x: expr)
+                case "sqrt": return SquareRoot(x: expr)
+                case "cbrt": return CubeRoot(x: expr)
+                case "sin": return Sine(x: expr)
+                case "cos": return Cosine(x: expr)
+                case "tan": return Tangent(x: expr)
+                case "arcsin": return ArcSine(x: expr)
+                case "arccos": return ArcCosine(x: expr)
+                case "arctan": return ArcTangent(x: expr)
+                case "sinh": return Sinh(x: expr)
+                case "cosh": return Cosh(x: expr)
+                case "tanh": return Tanh(x: expr)
+                case "arcsinh": return ArcSinh(x: expr)
+                case "arccosh": return ArcCosh(x: expr)
+                case "arctanh": return ArcTanh(x: expr)
+                case "ceil": return Ceiling(x: expr)
+                case "floor": return Floor(x: expr)
+                case "round": return Round(x: expr)
+                case "erf": return Erf(x: expr)
+                case "erfc": return Erfc(x: expr)
+                default: ()
+                }
             } else if try Parser.variableRegex.wholeMatch(in: token) != nil {
                 let variable = token
                 advance()

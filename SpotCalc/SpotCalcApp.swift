@@ -8,9 +8,11 @@ struct SpotCalcApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .frame(minWidth: 600, maxWidth: 600, minHeight: 100, idealHeight: 400)
+                .frame(minHeight: 150)
                 .clipShape(RoundedRectangle(cornerRadius: 15.0))
+                .edgesIgnoringSafeArea(.top)
         }
+        .windowResizability(.contentSize)
     }
 }
 
@@ -21,10 +23,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if let window = NSApplication.shared.windows.first {
             self.window = window
             
+            window.center()
             window.delegate = self
             window.isOpaque = false
             window.backgroundColor = .clear
-            window.isMovableByWindowBackground = true
+//            window.isMovableByWindowBackground = true
             window.level = .floating
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
@@ -34,10 +37,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             window.styleMask.insert([.resizable, .fullSizeContentView])
             window.invalidateShadow()
-            window.minSize = NSSize(width: 600, height: 100)  // Minimum size to maintain a fixed width
-            window.maxSize = NSSize(width: 600, height: CGFloat.greatestFiniteMagnitude)  // Maximum height to allow vertical resizing
-
-            registerHotkey()
+            //            window.minSize = NSSize(width: 600, height: 100)  // Minimum size to maintain a fixed width
+            //            window.maxSize = NSSize(width: 600, height: CGFloat.greatestFiniteMagnitude)  // Maximum height to allow vertical resizing
+            
+            //            registerHotkey()
         }
     }
 

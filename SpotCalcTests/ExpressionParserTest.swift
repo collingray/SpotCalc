@@ -10,13 +10,13 @@ class ComplexExpressionTests: XCTestCase {
         XCTAssertEqual(parser.tokens, expected)
     }
     
-    func testExpression(_ expressionString: String, expected: Float, variables: [String: Float] = [:]) {
+    func testExpression(_ expressionString: String, expected: Float, variables: [String: Expression] = [:]) {
         let parser = Parser(expression: expressionString)
         do {
             let expr = try parser.parse()
-            XCTAssertEqual(expr.eval(variables), expected, "\(expr)")
+            XCTAssertEqual(expr.eval(variables)!, expected, accuracy: 0.0001, "\(expr)")
         } catch {
-            XCTFail("Failed to parse expression: \(expressionString)")
+            XCTFail("Failed to parse expression: \(expressionString): \(error)")
         }
     }
     
@@ -39,8 +39,9 @@ class ComplexExpressionTests: XCTestCase {
         testExpression("2 * (8 + 1)", expected: 18)
         testExpression("3 + 5 * (2 - 8) / 2", expected: -12)
         testExpression("log(10) + ln(exp(1))", expected: 2)
+        testExpression("log(5 + 5)", expected: 1)
 //        testExpression("3! + 2^3", expected: 14)
-//        testExpression("sind(90) + cosd(180) * tand(45)", expected: 0)
+        testExpression("sin(pi/2) + cos(pi) * tan(pi/4)", expected: 0, variables: ["pi": Literal(val: .pi)])
         testExpression("ceil(1.2) + floor(1.8) + round(1.5)", expected: 5)
         testExpression("erf(1) + erfc(1)", expected: 1)
         testExpression("5 % 2 + 2 * 3", expected: 7)

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */; };
-		F0F1F4C92BF93E9F0016C79B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* ContentView.swift */; };
+		F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* MainView.swift */; };
 		F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */; };
 		F0F1F4CE2BF93E9F0016C79B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CD2BF93E9F0016C79B /* Preview Assets.xcassets */; };
 		F0F1F4D92BF93EA00016C79B /* SpotCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4D82BF93EA00016C79B /* SpotCalcTests.swift */; };
@@ -23,6 +23,10 @@
 		F0F1F5012BF99E1C0016C79B /* RealModule in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F5002BF99E1C0016C79B /* RealModule */; };
 		F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */; };
 		F0F1F5052BF9A4BA0016C79B /* ExpressionParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */; };
+		F0F1F5072BFAA7FA0016C79B /* ExpressionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */; };
+		F0F1F5092BFAC96D0016C79B /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5082BFAC96D0016C79B /* GraphView.swift */; };
+		F0F1F50B2BFAF75A0016C79B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F50A2BFAF75A0016C79B /* ContentView.swift */; };
+		F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +49,7 @@
 /* Begin PBXFileReference section */
 		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
-		F0F1F4C82BF93E9F0016C79B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F0F1F4C82BF93E9F0016C79B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0F1F4CD2BF93E9F0016C79B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpotCalc.entitlements; sourceTree = "<group>"; };
@@ -60,6 +64,10 @@
 		F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionTypes.swift; sourceTree = "<group>"; };
 		F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParser.swift; sourceTree = "<group>"; };
 		F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParserTest.swift; sourceTree = "<group>"; };
+		F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionData.swift; sourceTree = "<group>"; };
+		F0F1F5082BFAC96D0016C79B /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		F0F1F50A2BFAF75A0016C79B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphPanelView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,10 +124,14 @@
 			children = (
 				F0F1F4F12BF940BD0016C79B /* Info.plist */,
 				F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */,
-				F0F1F4C82BF93E9F0016C79B /* ContentView.swift */,
+				F0F1F4C82BF93E9F0016C79B /* MainView.swift */,
+				F0F1F50A2BFAF75A0016C79B /* ContentView.swift */,
 				F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */,
 				F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */,
 				F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */,
+				F0F1F5082BFAC96D0016C79B /* GraphView.swift */,
+				F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */,
+				F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */,
 				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
 				F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */,
 				F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */,
@@ -294,12 +306,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */,
 				F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */,
 				F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */,
 				F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */,
-				F0F1F4C92BF93E9F0016C79B /* ContentView.swift in Sources */,
+				F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */,
 				F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */,
+				F0F1F50B2BFAF75A0016C79B /* ContentView.swift in Sources */,
+				F0F1F5072BFAA7FA0016C79B /* ExpressionData.swift in Sources */,
 				F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */,
+				F0F1F5092BFAC96D0016C79B /* GraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
