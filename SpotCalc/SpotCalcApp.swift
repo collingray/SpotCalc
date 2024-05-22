@@ -40,8 +40,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             //            window.minSize = NSSize(width: 600, height: 100)  // Minimum size to maintain a fixed width
             //            window.maxSize = NSSize(width: 600, height: CGFloat.greatestFiniteMagnitude)  // Maximum height to allow vertical resizing
             
-            //            registerHotkey()
+            registerHotkey()
         }
+    }
+    
+    func checkToggleEvent(event: NSEvent) -> Bool {
+        return event.modifierFlags.contains(.control) &&
+        event.modifierFlags.contains(.option) &&
+        event.modifierFlags.contains(.command) &&
+        event.keyCode == 49 // space
     }
 
     func registerHotkey() {
@@ -53,18 +60,44 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { (event) in
-            if event.modifierFlags.contains(.command) && event.keyCode == 49 { // Command + Space
+            if self.checkToggleEvent(event: event) {
                 self.toggleWindow()
             }
         }
+        
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) in
+            if self.checkToggleEvent(event: event) {
+                self.toggleWindow()
+                return nil
+            }
+            
+            return event
+        }
     }
+    
+//    func windowDidMove(_ notification: Notification) {
+//        guard let window = notification.object as? NSWindow else { return }
+//
+//        let snapThreshold: CGFloat = 20
+//        let targetPosition = NSPoint(x: 100, y: 100)  // Example target position
+//
+//        let windowFrame = window.frame
+//        let deltaX = abs(windowFrame.origin.x - targetPosition.x)
+//        let deltaY = abs(windowFrame.origin.y - targetPosition.y)
+//        
+//        print(windowFrame)
+//        
+//        if deltaX < snapThreshold && deltaY < snapThreshold {
+//            window.setFrameOrigin(targetPosition)
+//        }
+//    }
 
     func toggleWindow() {
         if window.isVisible {
             window.orderOut(nil)
         } else {
             window.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+            NSApp.activate()
         }
     }
 }

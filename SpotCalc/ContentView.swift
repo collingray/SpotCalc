@@ -28,7 +28,7 @@ struct ContentView: View {
                     .transition(.move(edge: .trailing))
             }
         }
-        .background(VisualEffectView(material: .hudWindow, blendingMode: .withinWindow))
+        .background(VisualEffectView(material: .toolTip, blendingMode: .withinWindow))
     }
 }
 
