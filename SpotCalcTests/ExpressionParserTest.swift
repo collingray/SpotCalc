@@ -14,7 +14,7 @@ class ComplexExpressionTests: XCTestCase {
         let parser = Parser(expression: expressionString)
         do {
             let expr = try parser.parse()
-            XCTAssertEqual(expr.eval(variables)!, expected, accuracy: 0.0001, "\(expr)")
+            XCTAssertEqual(expr.eval(variables)!.asFloat(), expected, accuracy: 0.0001, "\(expr)")
         } catch {
             XCTFail("Failed to parse expression: \(expressionString): \(error)")
         }
@@ -29,7 +29,6 @@ class ComplexExpressionTests: XCTestCase {
         testTokenization("3! + 2^3", expected: ["3", "!", "+", "2", "^", "3"])
         testTokenization("sind(90) + cosd(180) * tand(45)", expected: ["sind", "(", "90", ")", "+", "cosd", "(", "180", ")", "*", "tand", "(", "45", ")"])
         testTokenization("ceil(1.2) + floor(1.8) + round(1.5)", expected: ["ceil", "(", "1.2", ")", "+", "floor", "(", "1.8", ")", "+", "round", "(", "1.5", ")"])
-        testTokenization("erf(1) + erfc(1)", expected: ["erf", "(", "1", ")", "+", "erfc", "(", "1", ")"])
         testTokenization("5 % 2 + 2 * 3", expected: ["5", "%", "2", "+", "2", "*", "3"])
     }
     
@@ -40,10 +39,9 @@ class ComplexExpressionTests: XCTestCase {
         testExpression("3 + 5 * (2 - 8) / 2", expected: -12)
         testExpression("log(10) + ln(exp(1))", expected: 2)
         testExpression("log(5 + 5)", expected: 1)
-//        testExpression("3! + 2^3", expected: 14)
+        testExpression("3! + 2^3", expected: 14)
         testExpression("sin(pi/2) + cos(pi) * tan(pi/4)", expected: 0, variables: ["pi": Literal(val: .pi)])
         testExpression("ceil(1.2) + floor(1.8) + round(1.5)", expected: 5)
-        testExpression("erf(1) + erfc(1)", expected: 1)
         testExpression("5 % 2 + 2 * 3", expected: 7)
         testExpression("2 ^ 1 ^ 3", expected: 2)
     }

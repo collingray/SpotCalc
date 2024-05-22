@@ -1,6 +1,24 @@
 {
-  "originHash" : "09ba5b072008fd76731864e3863041f77c188ab131718248c6519422c9413e08",
+  "originHash" : "9ef9815b4247e5735032669118b7f2b62e71e3f5e96728ee99df63ed4f814a39",
   "pins" : [
+    {
+      "identity" : "bigdecimal",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/collingray/BigDecimal",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ab430d681d1e4b4dd9a3da1cedb1443510be3be9"
+      }
+    },
+    {
+      "identity" : "bigint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mgriebling/BigInt.git",
+      "state" : {
+        "revision" : "498d4d290658d7c43a24b9e309c321592dc294f2",
+        "version" : "2.0.10"
+      }
+    },
     {
       "identity" : "latexswiftui",
       "kind" : "remoteSourceControl",
@@ -44,6 +62,15 @@
       "state" : {
         "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
         "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "uint128",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mgriebling/UInt128.git",
+      "state" : {
+        "revision" : "59dac4f14d657fd60bacfdfb7398d38b450af74f",
+        "version" : "3.1.5"
       }
     }
   ],

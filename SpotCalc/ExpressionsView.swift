@@ -49,12 +49,12 @@ struct ExpressionView: View {
                     ZStack {
                         HStack {
                             if expression.variables.isEmpty {
-                                LaTeX("x_\(expression.num) =")
+                                LaTeX("x_{\(expression.num)} =")
                                     .parsingMode(.all)
                                     .font(.title)
                                     .foregroundStyle(.gray)
                             } else {
-                                LaTeX("f_\(expression.num)(\(expression.variables.joined(separator: ", "))) =")
+                                LaTeX("f_{\(expression.num)}(\(expression.variables.joined(separator: ", "))) =")
                                     .parsingMode(.all)
                                     .font(.title)
                                     .foregroundStyle(.gray)

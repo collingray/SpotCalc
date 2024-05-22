@@ -1,4 +1,5 @@
 import Foundation
+import BigDecimal
 
 enum ParserError: Error {
     case invalidSyntax
@@ -10,13 +11,15 @@ class Parser {
 
     init(expression: String) {
         self.tokens = Parser.tokenize(expression)
+        print("tokens: \(self.tokens)")
     }
 
     static func tokenize(_ expression: String) -> [String] {
         
         let pattern = """
         (?x)
-        (-?\\d+(\\.\\d+)?) |     # Numbers (including negative and decimals)
+        (-?\\d+(\\.\\d+)?(e(-|\\+)?\\d+)?) | # Numbers (including negatives, decimals, and exponential notation)
+        (\\*\\*) |               # Alternate power
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)
         ([\\(\\)]) |             # Parentheses
         \\b(abs|fabs|log|ln|exp|sqrt|cbrt|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan|arcsinh|arccosh|arctanh|ceil|floor|round|erf|erfc)\\b | # Functions
@@ -59,17 +62,16 @@ class Parser {
         return term
     }
 
-    static let factorSymbols = ["*", "x", "/", "%"]
+    static let factorSymbols = ["*", "/", "%"]
     private func parseFactor() throws -> Expression {
-        var factor = try parsePrefix() // todo
+        var factor = try parsePostfix()
 
         while let token = currentToken, Parser.factorSymbols.contains(token) {
             advance()
-            let rhs = try parsePrefix()
+            let rhs = try parsePostfix()
             
             switch token {
             case "*": factor = Multiply(x: factor, y: rhs)
-            case "x": factor = Multiply(x: factor, y: rhs)
             case "/": factor = Divide(x: factor, y: rhs)
             case "%": factor = Modulus(x: factor, y: rhs)
             default: ()
@@ -80,28 +82,27 @@ class Parser {
     }
     
     
-//    static let postfixSymbols = ["!"]
-//    private func parsePostfix() throws -> Expression { // todo
-//        var postfix = try parsePrefix()
-//
-//        while let token = currentToken, Parser.postfixSymbols.contains(token) {
-//            advance()
-//            let rhs = try parsePrefix()
-//            
-//            switch token {
-//            case "!": postfix = Factorial(x: postfix)
-//            default: ()
-//            }
-//        }
-//
-//        return postfix
-//    }
+    static let postfixSymbols = ["!"]
+    private func parsePostfix() throws -> Expression {
+        var postfix = try parsePrefix()
+
+        while let token = currentToken, Parser.postfixSymbols.contains(token) {
+            advance()
+            
+            switch token {
+            case "!": postfix = Factorial(x: postfix)
+            default: ()
+            }
+        }
+
+        return postfix
+    }
     
     static let prefixSymbols = ["+", "-"]
     private func parsePrefix() throws -> Expression {
         if let token = currentToken, Parser.prefixSymbols.contains(token) {
             advance()
-            let rhs = try parseExponent()
+            let rhs = try parsePrefix()
             
             switch token {
             case "+": return UnaryPlus(x: rhs)
@@ -136,11 +137,13 @@ class Parser {
         return exponent
     }
     
-    static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round", "erf", "erfc"]
+    static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round"]
     static let variableRegex = /[a-zA-Z]\w*/
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
-            if let number = Float(token) {
+            let number = BigDecimal(token)
+            
+            if !number.isNaN {
                 advance()
                 return Literal(val: number)
             } else if token == "(" {
@@ -185,8 +188,6 @@ class Parser {
                 case "ceil": return Ceiling(x: expr)
                 case "floor": return Floor(x: expr)
                 case "round": return Round(x: expr)
-                case "erf": return Erf(x: expr)
-                case "erfc": return Erfc(x: expr)
                 default: ()
                 }
             } else if try Parser.variableRegex.wholeMatch(in: token) != nil {

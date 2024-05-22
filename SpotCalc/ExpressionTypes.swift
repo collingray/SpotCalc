@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import BigDecimal
 
 protocol Expression {
-    func eval(_ variables: [String: Expression]) -> Float?
+    func eval(_ variables: [String: Expression]) -> BigDecimal?
     func getVariables() -> Set<String>
     func renderLatex() -> String
 }
@@ -35,9 +36,9 @@ extension BinaryExpression {
 }
 
 struct Literal: Expression {
-    let val: Float
+    let val: BigDecimal
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         return val
     }
     
@@ -53,7 +54,7 @@ struct Literal: Expression {
 struct Variable: Expression {
     let name: String
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         return variables[name]?.eval(variables)
     }
     
@@ -70,7 +71,7 @@ struct Add: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
         return v1 + v2
@@ -85,7 +86,7 @@ struct Subtract: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
         return v1 - v2
@@ -100,7 +101,7 @@ struct Multiply: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
         return v1 * v2
@@ -115,10 +116,10 @@ struct Divide: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
-        return v1 / v2
+        return v1.divide(v2, .decimal32)
     }
     
     func renderLatex() -> String {
@@ -126,14 +127,29 @@ struct Divide: BinaryExpression {
     }
 }
 
+struct FloorDivide: BinaryExpression {
+    let x: Expression
+    let y: Expression
+    
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
+        guard let v1 = x.eval(variables) else { return nil }
+        guard let v2 = y.eval(variables) else { return nil }
+        return v1 / v2
+    }
+    
+    func renderLatex() -> String {
+        return "\\left\\lfloor\\frac{\(x.renderLatex())}{\(y.renderLatex())}\\right\\rfloor"
+    }
+}
+
 struct Modulus: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
-        return Float(Int(v1) % Int(v2))
+        return v1 % v2
     }
     
     func renderLatex() -> String {
@@ -145,10 +161,10 @@ struct Exponent: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
-        guard let b = x.eval(variables) else { return nil }
-        guard let e = y.eval(variables) else { return nil }
-        return pow(b, e)
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
+        guard let v1 = x.eval(variables) else { return nil }
+        guard let v2 = y.eval(variables) else { return nil }
+        return .pow(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -159,9 +175,9 @@ struct Exponent: BinaryExpression {
 struct SquareRoot: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return sqrt(v)
+        return .sqrt(v, .decimal32)
     }
     
     func renderLatex() -> String {
@@ -172,9 +188,9 @@ struct SquareRoot: UnaryExpression {
 struct CubeRoot: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return cbrt(v)
+        return BigDecimal.root(v, 3)
     }
     
     func renderLatex() -> String {
@@ -185,9 +201,14 @@ struct CubeRoot: UnaryExpression {
 struct Factorial: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
-        guard let v = x.eval(variables) else { return nil }
-        return Float((1...Int(v)).reduce(1, *))
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
+        guard let v = x.eval(variables)?.round(.decimal32) else { return nil }
+        
+        if (v <= 0 && BigDecimal.isIntValue(v)) || v <= -9 {
+            return nil
+        }
+        
+        return .factorial(v, .decimal32)
     }
     
     func renderLatex() -> String {
@@ -198,7 +219,7 @@ struct Factorial: UnaryExpression {
 struct UnaryPlus: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         return x.eval(variables)
     }
     
@@ -210,7 +231,7 @@ struct UnaryPlus: UnaryExpression {
 struct UnaryMinus: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return -v
     }
@@ -223,7 +244,7 @@ struct UnaryMinus: UnaryExpression {
 struct Grouping: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         return x.eval(variables)
     }
     
@@ -235,9 +256,9 @@ struct Grouping: UnaryExpression {
 struct Sine: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return sin(v)
+        return .sin(v)
     }
     
     func renderLatex() -> String {
@@ -248,9 +269,9 @@ struct Sine: UnaryExpression {
 struct Cosine: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return cos(v)
+        return .cos(v)
     }
     
     func renderLatex() -> String {
@@ -261,9 +282,9 @@ struct Cosine: UnaryExpression {
 struct Tangent: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return tan(v)
+        return .tan(v)
     }
     
     func renderLatex() -> String {
@@ -274,9 +295,9 @@ struct Tangent: UnaryExpression {
 struct ArcSine: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return asin(v)
+        return .asin(v)
     }
     
     func renderLatex() -> String {
@@ -287,9 +308,9 @@ struct ArcSine: UnaryExpression {
 struct ArcCosine: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return acos(v)
+        return .acos(v)
     }
     
     func renderLatex() -> String {
@@ -300,9 +321,9 @@ struct ArcCosine: UnaryExpression {
 struct ArcTangent: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return atan(v)
+        return .atan(v)
     }
     
     func renderLatex() -> String {
@@ -313,9 +334,9 @@ struct ArcTangent: UnaryExpression {
 struct Sinh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return sinh(v)
+        return .sinh(v)
     }
     
     func renderLatex() -> String {
@@ -326,9 +347,9 @@ struct Sinh: UnaryExpression {
 struct Cosh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return cosh(v)
+        return .cosh(v)
     }
     
     func renderLatex() -> String {
@@ -339,9 +360,9 @@ struct Cosh: UnaryExpression {
 struct Tanh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return tanh(v)
+        return .tanh(v)
     }
     
     func renderLatex() -> String {
@@ -352,9 +373,9 @@ struct Tanh: UnaryExpression {
 struct ArcSinh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return asinh(v)
+        return .asinh(v)
     }
     
     func renderLatex() -> String {
@@ -365,9 +386,9 @@ struct ArcSinh: UnaryExpression {
 struct ArcCosh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return acosh(v)
+        return .acosh(v)
     }
     
     func renderLatex() -> String {
@@ -378,9 +399,9 @@ struct ArcCosh: UnaryExpression {
 struct ArcTanh: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return atanh(v)
+        return .atanh(v)
     }
     
     func renderLatex() -> String {
@@ -391,7 +412,7 @@ struct ArcTanh: UnaryExpression {
 struct Ceiling: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return ceil(v)
     }
@@ -404,7 +425,7 @@ struct Ceiling: UnaryExpression {
 struct Floor: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return floor(v)
     }
@@ -417,7 +438,7 @@ struct Floor: UnaryExpression {
 struct Round: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return round(v)
     }
@@ -431,10 +452,15 @@ struct BitwiseAnd: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
-        return Float(Int(v1) & Int(v2))
+        
+        if (BigDecimal.isIntValue(v1) && BigDecimal.isIntValue(v2)) {
+            return BigDecimal(integerLiteral: Int(v1) & Int(v2))
+        } else {
+            return nil
+        }
     }
     
     func renderLatex() -> String {
@@ -446,10 +472,15 @@ struct BitwiseOr: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
-        return Float(Int(v1) | Int(v2))
+        
+        if (BigDecimal.isIntValue(v1) && BigDecimal.isIntValue(v2)) {
+            return BigDecimal(integerLiteral: Int(v1) | Int(v2))
+        } else {
+            return nil
+        }
     }
     
     func renderLatex() -> String {
@@ -461,10 +492,15 @@ struct BitwiseXor: BinaryExpression {
     let x: Expression
     let y: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v1 = x.eval(variables) else { return nil }
         guard let v2 = y.eval(variables) else { return nil }
-        return Float(Int(v1) ^ Int(v2))
+        
+        if (BigDecimal.isIntValue(v1) && BigDecimal.isIntValue(v2)) {
+            return BigDecimal(integerLiteral: Int(v1) ^ Int(v2))
+        } else {
+            return nil
+        }
     }
     
     func renderLatex() -> String {
@@ -475,9 +511,9 @@ struct BitwiseXor: BinaryExpression {
 struct LogarithmBase10: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return log10(v)
+        return .log10(v)
     }
     
     func renderLatex() -> String {
@@ -488,9 +524,9 @@ struct LogarithmBase10: UnaryExpression {
 struct NaturalLogarithm: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return log(v)
+        return .log(v)
     }
     
     func renderLatex() -> String {
@@ -501,9 +537,9 @@ struct NaturalLogarithm: UnaryExpression {
 struct Exponential: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
-        return exp(v)
+        return .exp(v)
     }
     
     func renderLatex() -> String {
@@ -514,7 +550,7 @@ struct Exponential: UnaryExpression {
 struct AbsoluteValue: UnaryExpression {
     let x: Expression
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return abs(v)
     }
@@ -524,37 +560,11 @@ struct AbsoluteValue: UnaryExpression {
     }
 }
 
-struct Erf: UnaryExpression {
-    let x: Expression
-    
-    func eval(_ variables: [String: Expression]) -> Float? {
-        guard let v = x.eval(variables) else { return nil }
-        return erf(v)
-    }
-    
-    func renderLatex() -> String {
-        return "\\operatorname{erf}{(\(x.renderLatex()))}"
-    }
-}
-
-struct Erfc: UnaryExpression {
-    let x: Expression
-    
-    func eval(_ variables: [String: Expression]) -> Float? {
-        guard let v = x.eval(variables) else { return nil }
-        return erfc(v)
-    }
-    
-    func renderLatex() -> String {
-        return "\\operatorname{erfc}{(\(x.renderLatex()))}"
-    }
-}
-
 struct NamedFunction: UnaryExpression {
     let x: Expression
     let name: String
     
-    func eval(_ variables: [String: Expression]) -> Float? {
+    func eval(_ variables: [String: Expression]) -> BigDecimal? {
         guard let v = x.eval(variables) else { return nil }
         return v // todo
     }

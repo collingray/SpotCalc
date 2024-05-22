@@ -8,9 +8,10 @@
 import SwiftUI
 import Charts
 import AppKit
+import BigDecimal
 
 struct GraphView: View {
-    let functions: [(Int, (Float) -> Float, Color)]
+    let functions: [(Int, (BigDecimal) -> BigDecimal?, Color)]
     let steps: Double
     
     @Binding var xMin: Double
@@ -51,11 +52,14 @@ struct GraphView: View {
         }
     }
     
-    var plotData: [(Int, Float, Float, Color)] {
+    var plotData: [(Int, Double, Double, Color)] {
         x_points.flatMap { x in
-            
-            functions.map { i, f, c in
-                (i, Float(x), f(Float(x)), c)
+            functions.compactMap { i, f, c in
+                if let y = f(BigDecimal(x)) {
+                    return (i, x, Double(y), c)
+                } else {
+                    return nil
+                }
             }
         }
     }

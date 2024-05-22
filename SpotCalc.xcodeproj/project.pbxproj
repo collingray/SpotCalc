@@ -27,6 +27,8 @@
 		F0F1F5092BFAC96D0016C79B /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F5082BFAC96D0016C79B /* GraphView.swift */; };
 		F0F1F50B2BFAF75A0016C79B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F50A2BFAF75A0016C79B /* ContentView.swift */; };
 		F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */; };
+		F0FC478E2BFE9A1300DA8BE3 /* BigDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = F0FC478D2BFE9A1300DA8BE3 /* BigDecimal */; };
+		F0FC47912BFE9F0F00DA8BE3 /* BigDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = F0FC47902BFE9F0F00DA8BE3 /* BigDecimal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,7 +78,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F1F5012BF99E1C0016C79B /* RealModule in Frameworks */,
+				F0FC47912BFE9F0F00DA8BE3 /* BigDecimal in Frameworks */,
 				F0F1F4F42BF96A8A0016C79B /* LaTeXSwiftUI in Frameworks */,
+				F0FC478E2BFE9A1300DA8BE3 /* BigDecimal in Frameworks */,
 				F0F1F4FF2BF99E1C0016C79B /* Numerics in Frameworks */,
 				F0F1F4FD2BF99E1C0016C79B /* ComplexModule in Frameworks */,
 			);
@@ -187,6 +191,8 @@
 				F0F1F4FC2BF99E1C0016C79B /* ComplexModule */,
 				F0F1F4FE2BF99E1C0016C79B /* Numerics */,
 				F0F1F5002BF99E1C0016C79B /* RealModule */,
+				F0FC478D2BFE9A1300DA8BE3 /* BigDecimal */,
+				F0FC47902BFE9F0F00DA8BE3 /* BigDecimal */,
 			);
 			productName = SpotCalc;
 			productReference = F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */;
@@ -236,7 +242,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					F0F1F4C22BF93E9F0016C79B = {
 						CreatedOnToolsVersion = 15.3;
@@ -263,6 +269,7 @@
 			packageReferences = (
 				F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
 				F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */,
+				F0FC478F2BFE9F0F00DA8BE3 /* XCRemoteSwiftPackageReference "BigDecimal" */,
 			);
 			productRefGroup = F0F1F4C42BF93E9F0016C79B /* Products */;
 			projectDirPath = "";
@@ -387,6 +394,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -450,6 +458,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -480,6 +489,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
 				DEVELOPMENT_TEAM = CSG84864FN;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -509,6 +519,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
 				DEVELOPMENT_TEAM = CSG84864FN;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -536,6 +547,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CSG84864FN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.3;
@@ -555,6 +567,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CSG84864FN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.3;
@@ -573,6 +586,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CSG84864FN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -590,6 +604,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = CSG84864FN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
@@ -659,6 +674,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		F0FC478F2BFE9F0F00DA8BE3 /* XCRemoteSwiftPackageReference "BigDecimal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/collingray/BigDecimal";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -681,6 +704,15 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */;
 			productName = RealModule;
+		};
+		F0FC478D2BFE9A1300DA8BE3 /* BigDecimal */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BigDecimal;
+		};
+		F0FC47902BFE9F0F00DA8BE3 /* BigDecimal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F0FC478F2BFE9F0F00DA8BE3 /* XCRemoteSwiftPackageReference "BigDecimal" */;
+			productName = BigDecimal;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
