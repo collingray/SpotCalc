@@ -20,14 +20,15 @@ class Parser {
         (?x)
         (-?\\d+(\\.\\d+)?(e(-|\\+)?\\d+)?) | # Numbers (including negatives, decimals, and exponential notation)
         (\\*\\*) |               # Alternate power
+        (//) |                   # Floor divide
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)
         ([\\(\\)]) |             # Parentheses
-        \\b(abs|fabs|log|ln|exp|sqrt|cbrt|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan|arcsinh|arccosh|arctanh|ceil|floor|round|erf|erfc)\\b | # Functions
+        \\b(abs|fabs|log|ln|exp|sqrt|cbrt|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan|arcsinh|arccosh|arctanh|ceil|floor|round)\\b | # Functions
         (!) |                    # Factorial
         (%|\\bmod\\b) |          # Modulus
         \\b(mph|hours|miles|km|kilometers|deg|degrees|radians|%)\\b | # Units and percentage
         (\\)) |                  # Implied multiplication (e.g., 2(8+1))
-        ([a-zA-Z]\\w*)              # Variables (e.g., e, pi)
+        ([a-zA-Z]\\w*)           # Variables (e.g., e, pi)
         """
 
         let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .allowCommentsAndWhitespace])
@@ -62,7 +63,7 @@ class Parser {
         return term
     }
 
-    static let factorSymbols = ["*", "/", "%"]
+    static let factorSymbols = ["*", "/", "%", "//"]
     private func parseFactor() throws -> Expression {
         var factor = try parsePostfix()
 
@@ -74,6 +75,7 @@ class Parser {
             case "*": factor = Multiply(x: factor, y: rhs)
             case "/": factor = Divide(x: factor, y: rhs)
             case "%": factor = Modulus(x: factor, y: rhs)
+            case "//": factor = FloorDivide(x: factor, y: rhs)
             default: ()
             }
         }
