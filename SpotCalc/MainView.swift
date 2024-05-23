@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @Binding var expressions: [ExpressionData]
+    @Environment(ExpressionData.self) var data: ExpressionData
     
     @State private var expressionText = ""
     
@@ -9,11 +9,11 @@ struct MainView: View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
                 VStack(alignment: .leading) {
-                    ExpressionsView(expressions: $expressions)
+                    ExpressionsView()
                 }.frame(maxWidth: .infinity)
                     .padding()
                     .rotationEffect(Angle(degrees: 180))
-                    .onChange(of: $expressions.count) { oldValue, newValue in
+                    .onChange(of: data.count) { oldValue, newValue in
                         if newValue > oldValue {
                             proxy.scrollTo(newValue-1, anchor: .bottom)
                         }
@@ -34,8 +34,8 @@ struct MainView: View {
                 .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color.secondary), alignment: .top)
                 .onSubmit {
                     if expressionText != "" {
-                        if let newExpression = try? ExpressionData(expressionText) {
-                            expressions.append(newExpression)
+                        if let newExpression = try? ParsedExpression(expressionText) {
+                            data.expressions.append(newExpression)
                             expressionText = ""
                         }
                     }

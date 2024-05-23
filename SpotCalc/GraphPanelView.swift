@@ -10,7 +10,7 @@ import Charts
 import BigDecimal
 
 struct GraphPanelView: View {
-    @Binding var expressions: [ExpressionData]
+    @Environment(ExpressionData.self) var data: ExpressionData
     
     @State var xMin: Double = -10
     @State var xMax: Double = 10
@@ -21,12 +21,12 @@ struct GraphPanelView: View {
     @State var yScale: GraphScale = .linear
     
     var functions: [(Int, (BigDecimal) -> BigDecimal?, Color)] {
-        return expressions.filter { expr in
-            expr.isGraphed && expr.variables.count == 1
+        return data.expressions.filter { expr in
+            expr.isGraphed && expr.parameters?.count == 1
         }.map { expr in
-            let varName: String = expr.variables.first!
+            let varName: String = expr.parameters!.first!
             
-            return (expr.num, { expr.ast?.eval([varName: Literal(val: $0)]) }, expr.graphColor ?? .blue)
+            return (expr.num, { expr.ast?.eval([varName: Literal(val: $0)], [:]) }, expr.graphColor ?? .blue)
         }
     }
     

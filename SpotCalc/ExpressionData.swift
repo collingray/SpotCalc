@@ -7,17 +7,65 @@
 
 import Foundation
 import SwiftUI
+import BigDecimal
 
-struct ExpressionData {
-    let num: Int
-    var expressionString: String
-    var ast: Expression?
-    var latexString: String?
-    var displayString: String
-    var displayValue: String?
-    var variables: Set<String>
-    var graphColor: Color?
+@Observable 
+class ExpressionData {
+    var expressions: [ParsedExpression]
     
+    init(_ expressions: [ParsedExpression] = []) {
+        self.expressions = expressions
+    }
+    
+    var graphVisible: Bool {
+        expressions.contains { expression in
+            expression.isGraphed
+        }
+    }
+    
+    var count: Int {
+        expressions.count
+    }
+    
+    var variables: [String : BigDecimal] {
+        let vars = self.expressions.compactMap { expression in
+            if let val = expression.value {
+                return ("x\(expression.num)", val)
+            } else {
+                return nil
+            }
+        }
+        
+        return Dictionary(uniqueKeysWithValues: vars)
+    }
+    
+    var functions: [String : ([Expression]) -> Expression?] {
+        let funcs = self.expressions.compactMap { expression in
+            if let f = expression.function {
+                return ("f\(expression.num)", f)
+            } else {
+                return nil
+            }
+        }
+        
+        return Dictionary(uniqueKeysWithValues: funcs)
+    }
+}
+
+@Observable
+class ParsedExpression {
+    let num: Int
+    
+    var ast: Expression?
+    
+    var expressionString: String
+    var displayString: String
+    var value: BigDecimal?
+    
+    var parameters: [String]?
+    var function: (([Expression]) -> Expression?)?
+    
+    var graphColor: Color?
     var isGraphed: Bool {
         return graphColor != nil
     }
@@ -40,38 +88,55 @@ struct ExpressionData {
     static var available_colors: [Color] = possible_colors
     
     init(_ expression: String) throws {
-        num = ExpressionData.total_count
-        ExpressionData.total_count += 1
+        num = ParsedExpression.total_count
+        ParsedExpression.total_count += 1
         expressionString = expression
         let parser = Parser(expression: expression)
-        ast = try parser.parse()
-        latexString = ast?.renderLatex()
+        let parsed = try? parser.parse()
+        ast = parsed
+        
+        let latexString = parsed?.renderLatex()
         displayString = latexString ?? expression
-        variables = ast?.getVariables() ?? Set()
-        displayValue = ast?.eval([:])?.description
+        value = ast?.eval([:], [:])
+        
+        if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
+            parameters = params
+            function = f
+        } else {
+            parameters = nil
+            function = nil
+        }
     }
     
-    mutating func updateExpression(_ newExpression: String) {
+    func updateExpression(_ newExpression: String) {
         if newExpression != expressionString {
             expressionString = newExpression
             let parser = Parser(expression: expressionString)
             ast = try? parser.parse()
-            latexString = ast?.renderLatex()
+            
+            let latexString = ast?.renderLatex()
             displayString = latexString ?? expressionString
-            variables = ast?.getVariables() ?? Set()
-            displayValue = ast?.eval([:])?.description
+            value = ast?.eval([:], [:])
+            
+            if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
+                parameters = params
+                function = f
+            } else {
+                parameters = nil
+                function = nil
+            }
         }
     }
     
-    mutating func enableGraph() {
-        if let color = ExpressionData.available_colors.popLast() {
+    func enableGraph() {
+        if let color = ParsedExpression.available_colors.popLast() {
             graphColor = color
         }
     }
     
-    mutating func disableGraph() {
+    func disableGraph() {
         if let color = graphColor {
-            ExpressionData.available_colors.append(color)
+            ParsedExpression.available_colors.append(color)
             graphColor = nil
         }
     }

@@ -60,9 +60,7 @@ struct GraphView: View {
                                 dyMin = (1.0 - Double(offset.y)) * dy
                                 dyMax = -Double(offset.y) * dy
                             }
-                        }.onEnded { val in
-                            print(val.magnification)
-                            
+                        }.onEnded { val in                            
                             xMin += dxMin
                             xMax += dxMax
                             yMin += dyMin
@@ -122,7 +120,6 @@ struct ChartView: View {
     static let overdraw: Double = 2.0
 
     var x_points: [Float] {
-        print("recomputing x_points")
         let overdraw_width = ChartView.overdraw * (xMax-xMin) / 2
         let points = Array(stride(from: Float(xMin - overdraw_width), through: Float(xMax + overdraw_width), by: Float((xMax - xMin) / steps)))
         

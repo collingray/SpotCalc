@@ -8,26 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var expressions: [ExpressionData] = []
-    
-    var graphVisible: Bool {
-        expressions.contains { expression in
-            expression.isGraphed
-        }
-    }
+    @State private var data = ExpressionData()
     
     var body: some View {
         
         HStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
-                MainView(expressions: $expressions)
+                MainView()
             }.frame(width: 600)
-            if graphVisible {
-                GraphPanelView(expressions: $expressions)
+            if data.graphVisible {
+                GraphPanelView()
                     .frame(width: 400)
                     .transition(.move(edge: .trailing))
             }
         }
+        .environment(data)
         .background(VisualEffectView(material: .toolTip, blendingMode: .withinWindow))
     }
 }

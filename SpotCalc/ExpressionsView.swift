@@ -2,12 +2,12 @@ import SwiftUI
 import LaTeXSwiftUI
 
 struct ExpressionsView: View {
-    @Binding var expressions: [ExpressionData]
+    @Environment(ExpressionData.self) var data: ExpressionData
     
     var body: some View {
-        ForEach(Array($expressions.enumerated()), id: \.0) { i, expr in
+        ForEach(Array(data.expressions.enumerated()), id: \.0) { i, expr in
             ZStack {
-                ExpressionView(expression: expr, deleteExpression: {expressions.remove(at: i)})
+                ExpressionView(expression: expr, deleteExpression: {data.expressions.remove(at: i)})
                     .padding([.top], 10)
                     .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
             }
@@ -16,7 +16,8 @@ struct ExpressionsView: View {
 }
 
 struct ExpressionView: View {
-    @Binding var expression: ExpressionData
+    @Bindable var expression: ParsedExpression
+    
     let deleteExpression: () -> ()
     
     @State var hovered: Bool = false
@@ -48,13 +49,13 @@ struct ExpressionView: View {
                 } else {
                     ZStack {
                         HStack {
-                            if expression.variables.isEmpty {
-                                LaTeX("x_{\(expression.num)} =")
+                            if let parameters = expression.parameters {
+                                LaTeX("f_{\(expression.num)}(\(parameters.joined(separator: ", "))) =")
                                     .parsingMode(.all)
                                     .font(.title)
                                     .foregroundStyle(.gray)
                             } else {
-                                LaTeX("f_{\(expression.num)}(\(expression.variables.joined(separator: ", "))) =")
+                                LaTeX("x_{\(expression.num)} =")
                                     .parsingMode(.all)
                                     .font(.title)
                                     .foregroundStyle(.gray)
@@ -76,7 +77,7 @@ struct ExpressionView: View {
                         
                         HStack {
                             Spacer()
-                            if let value = expression.displayValue {
+                            if let value = expression.value?.description {
                                 LaTeX("= \(value)")
                                     .parsingMode(.all)
                                     .font(.title)

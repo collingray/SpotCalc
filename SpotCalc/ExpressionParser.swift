@@ -140,7 +140,7 @@ class Parser {
     }
     
     static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round"]
-    static let variableRegex = /[a-zA-Z]\w*/
+    static let symbolRegex = /[a-zA-Z]\w*/
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
             let number = BigDecimal(token)
@@ -192,10 +192,25 @@ class Parser {
                 case "round": return Round(x: expr)
                 default: ()
                 }
-            } else if try Parser.variableRegex.wholeMatch(in: token) != nil {
-                let variable = token
+            } else if try Parser.symbolRegex.wholeMatch(in: token) != nil {
                 advance()
-                return Variable(name: variable)
+                guard currentToken == "(" else {
+                    return Variable(name: token)
+                }
+                advance()
+                var exprs: [Expression] = [try parseExpression()]
+                
+                while let token = currentToken, token == "," {
+                    advance()
+                    exprs.append(try parseExpression())
+                }
+                
+                guard currentToken == ")" else {
+                    throw ParserError.invalidSyntax
+                }
+                advance()
+                
+                return Function(name: token, args: exprs)
             }
         }
 
