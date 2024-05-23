@@ -106,6 +106,10 @@ class ParsedExpression {
             parameters = nil
             function = nil
         }
+        
+        if let tree = ast?.printTree() {
+            print(tree)
+        }
     }
     
     func updateExpression(_ newExpression: String) {
@@ -124,6 +128,10 @@ class ParsedExpression {
             } else {
                 parameters = nil
                 function = nil
+            }
+            
+            if let tree = ast?.printTree() {
+                print(tree)
             }
         }
     }
