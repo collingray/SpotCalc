@@ -38,7 +38,12 @@ class Parser {
     }
 
     func parse() throws -> Expression {
-        return try parseExpression()
+        let expr = try parseExpression()
+        if currentToken != nil {
+            throw ParserError.invalidSyntax
+        }
+        
+        return expr
     }
     
     private func parseExpression() throws -> Expression {
@@ -125,7 +130,7 @@ class Parser {
     }
 
     private func parseExponentRecursively() throws -> Expression {
-        var exponent = try parseAtom()
+        var exponent = try parseLiteral()
 
         if let token = currentToken, Parser.exponentSymbols.contains(token) {
             advance()
@@ -141,16 +146,29 @@ class Parser {
         return exponent
     }
     
+    private func parseLiteral() throws -> Expression {
+        if let token = currentToken {
+            let number = BigDecimal(token)
+            if !number.isNaN {
+                advance()
+                let literal = Literal(val: number)
+                
+                if let expr = try? parseAtom() {
+                    return Coefficient(x: literal, y: expr)
+                } else {
+                    return literal
+                }
+            }
+        }
+        
+        return try parseAtom()
+    }
+    
     static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round"]
     static let symbolRegex = /[a-zA-Z]\w*/
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
-            let number = BigDecimal(token)
-            
-            if !number.isNaN {
-                advance()
-                return Literal(val: number)
-            } else if token == "(" {
+            if token == "(" {
                 advance()
                 let expr = try parseExpression()
                 guard currentToken == ")" else {

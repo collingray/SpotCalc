@@ -124,7 +124,7 @@ struct Literal: Expression {
     }
     
     func renderLatex() -> String {
-        return "\(val)"
+        return val.asString()
     }
     
     func printTree() -> String {
@@ -749,5 +749,22 @@ struct AbsoluteValue: UnaryExpression {
     
     func renderLatex() -> String {
         return "\\left| \(x.renderLatex()) \\right|"
+    }
+}
+
+struct Coefficient: BinaryExpression {
+    var x: Expression
+    var y: Expression
+    
+    let symbol = "Ax"
+    
+    func eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> BigDecimal? {
+        guard let v1 = x.eval(variables, functions) else { return nil }
+        guard let v2 = y.eval(variables, functions) else { return nil }
+        return v1 * v2
+    }
+    
+    func renderLatex() -> String {
+        return x.renderLatex() + y.renderLatex()
     }
 }

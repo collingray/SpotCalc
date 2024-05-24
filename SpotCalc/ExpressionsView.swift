@@ -27,7 +27,7 @@ struct ExpressionView: View {
     @FocusState var textFieldFocused: Bool
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .trailing) {
             HStack {
                 if editing {
                     TextField("", text: $editingText, onEditingChanged: { beganEditing in
@@ -84,7 +84,8 @@ struct ExpressionView: View {
                             if let value = expression.value?.description {
                                 LaTeXImage(text: "= \(value)", maxWidth: 120)
                                     .foregroundStyle(.gray)
-                                    
+                            } else {
+                                Spacer()
                             }
                         }.frame(width: 120, alignment: .bottomTrailing)
                     }
@@ -104,7 +105,7 @@ struct ExpressionView: View {
             }
             
             if hovered {
-                HStack(alignment: .center) {
+                HStack {
                     Spacer()
                     
                     Button(action: {
@@ -118,13 +119,11 @@ struct ExpressionView: View {
                             Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
-                                .padding([.top, .trailing], 5)
                                 .foregroundStyle(graphColor)
                         } else {
                             Image(systemName: "chart.line.uptrend.xyaxis.circle")
                                 .resizable()
                                 .frame(width: 25, height: 25)
-                                .padding([.top, .trailing], 5)
                         }
                     }.buttonStyle(BorderlessButtonStyle())
                     
@@ -134,9 +133,16 @@ struct ExpressionView: View {
                         Image(systemName: "trash.circle.fill")
                             .resizable()
                             .frame(width: 25, height: 25)
-                            .padding([.top, .trailing], 5)
                     }.buttonStyle(BorderlessButtonStyle())
                 }
+                .fixedSize(horizontal: true, vertical: false)
+                .frame(maxHeight: .infinity)
+                
+                .padding(.leading, 50)
+                .background(
+                    VisualEffectView(material: .toolTip, blendingMode: .withinWindow)
+                        .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
+                )
             }
         }.frame(minHeight: 50)
         .onHover(perform: { hovering in
