@@ -1,5 +1,6 @@
 import SwiftUI
 import LaTeXSwiftUI
+import AppKit
 
 struct ExpressionsView: View {
     @Environment(ExpressionData.self) var data: ExpressionData
@@ -47,44 +48,45 @@ struct ExpressionView: View {
                     }
                     
                 } else {
-                    ZStack {
-                        HStack {
+                    HStack {
+                        Group {
                             if let parameters = expression.parameters {
-                                LaTeX("f_{\(expression.num)}(\(parameters.joined(separator: ", "))) =")
-                                    .parsingMode(.all)
-                                    .font(.title)
+                                LaTeXImage(text: "f_{\(expression.num)}(\(parameters.joined(separator: ", "))) =", maxWidth: 120)
                                     .foregroundStyle(.gray)
                             } else {
-                                LaTeX("x_{\(expression.num)} =")
-                                    .parsingMode(.all)
-                                    .font(.title)
+                                LaTeXImage(text: "x_{\(expression.num)} =", maxWidth: 120)
                                     .foregroundStyle(.gray)
                             }
-                            Spacer()
                         }
-                        
-                        VStack {
-                            LaTeX(expression.displayString)
-                                .parsingMode(.all)
-                                .font(.title)
-                        }.onTapGesture(count: 2, perform: {
-                            if editingText == "" {
-                                editingText = expression.expressionString
-                            }
-                            editing = true
-                            textFieldFocused = true
-                        })
+                        .frame(width: 120, alignment: .leading)
                         
                         HStack {
-                            Spacer()
-                            if let value = expression.value?.description {
-                                LaTeX("= \(value)")
-                                    .parsingMode(.all)
+                            if expression.isError {
+                                Text(expression.displayString)
                                     .font(.title)
-                                    .foregroundStyle(.gray)
-                                
+                                    .underline(pattern: .solid, color: .red)
+                            } else {
+                                LaTeXImage(text: expression.displayString, maxWidth: 312)
                             }
                         }
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .onTapGesture(count: 2, perform: {
+                                if editingText == "" {
+                                    editingText = expression.expressionString
+                                }
+                                editing = true
+                                textFieldFocused = true
+                            })
+                            
+                        
+                        
+                        Group {
+                            if let value = expression.value?.description {
+                                LaTeXImage(text: "= \(value)", maxWidth: 120)
+                                    .foregroundStyle(.gray)
+                                    
+                            }
+                        }.frame(width: 120, alignment: .bottomTrailing)
                     }
                 }
             }
@@ -136,9 +138,34 @@ struct ExpressionView: View {
                     }.buttonStyle(BorderlessButtonStyle())
                 }
             }
-        }.onHover(perform: { hovering in
+        }.frame(minHeight: 50)
+        .onHover(perform: { hovering in
             hovered = hovering
         })
+    }
+}
+
+struct LaTeXImage: View {
+    let text: String
+    let maxWidth: Int
+    
+    var body: some View {
+        let latex = LaTeX(text)
+            .parsingMode(.all)
+            .font(.largeTitle)
+        let renderer = ImageRenderer(content: latex)
+        let _ = (renderer.scale = renderer.scale * 5)
+        let image = renderer.nsImage
+        
+        if let image = image {
+            if image.size.width <= CGFloat(maxWidth) {
+                Image(nsImage: image)
+            } else {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            }
+        }
     }
 }
 

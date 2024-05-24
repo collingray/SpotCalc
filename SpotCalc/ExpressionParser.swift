@@ -69,7 +69,9 @@ class Parser {
 
         while let token = currentToken, Parser.factorSymbols.contains(token) {
             advance()
-            let rhs = try parsePostfix()
+            guard let rhs = try? parsePostfix() else {
+                throw ParserError.invalidSyntax
+            }
             
             switch token {
             case "*": factor = Multiply(x: factor, y: rhs)

@@ -67,7 +67,11 @@ class ParsedExpression {
     
     var graphColor: Color?
     var isGraphed: Bool {
-        return graphColor != nil
+        graphColor != nil
+    }
+    
+    var isError: Bool {
+        ast == nil
     }
     
     static var total_count = 0
