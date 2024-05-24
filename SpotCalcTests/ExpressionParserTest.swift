@@ -10,11 +10,11 @@ class ComplexExpressionTests: XCTestCase {
         XCTAssertEqual(parser.tokens, expected)
     }
     
-    func testExpression(_ expressionString: String, expected: Float, variables: [String: Expression] = [:]) {
+    func testExpression(_ expressionString: String, expected: Float, variables: [String: Expression] = [:],  functions: [String : ([Expression]) -> Expression?] = [:]) {
         let parser = Parser(expression: expressionString)
         do {
             let expr = try parser.parse()
-            XCTAssertEqual(expr.eval(variables)!.asFloat(), expected, accuracy: 0.0001, "\(expr)")
+            XCTAssertEqual(expr.eval(variables, functions)!.asFloat(), expected, accuracy: 0.0001, "\(expr)")
         } catch {
             XCTFail("Failed to parse expression: \(expressionString): \(error)")
         }

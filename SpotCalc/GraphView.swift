@@ -11,7 +11,7 @@ import AppKit
 import BigDecimal
 
 struct GraphView: View {
-    let functions: [(Int, (BigDecimal) -> BigDecimal?, Color)]
+    let functions: [(Int, ([Float]) -> Result<[Float], ExpressionError>, Color)]
     let steps: Double
     
     @Binding var xMin: Double
@@ -20,7 +20,7 @@ struct GraphView: View {
     @Binding var yMax: Double
     @Binding var xScale: GraphScale
     @Binding var yScale: GraphScale
-        
+    
     @State var dxMin: Double = 0
     @State var dxMax: Double = 0
     @State var dyMin: Double = 0
@@ -108,7 +108,7 @@ struct GraphView: View {
 
 // Necessary in order to isolate states to prevent recomputing points during pans/zooms
 struct ChartView: View {
-    let functions: [(Int, (BigDecimal) -> BigDecimal?, Color)]
+    let functions: [(Int, ([Float]) -> Result<[Float], ExpressionError>, Color)]
     let steps: Double
         
     @Binding var xMin: Double
@@ -130,13 +130,15 @@ struct ChartView: View {
     }
     
     var plotData: [(Int, Float, Float, Color)] {
-        x_points.flatMap { x in
-            functions.compactMap { i, f, c in
-                if let y = f(BigDecimal(Double(x))) {
-                    return (i, x, Float(y), c)
-                } else {
-                    return nil
-                }
+        functions.flatMap { i, f, c in
+            let y = f(x_points)
+            
+            switch y {
+            case .success(let y):
+                return zip(x_points, y).map({x, y in (i, x, y, c)})
+            case .failure(let err):
+                print(err)
+                return []
             }
         }
     }

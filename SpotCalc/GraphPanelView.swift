@@ -20,18 +20,30 @@ struct GraphPanelView: View {
     @State var xScale: GraphScale = .linear
     @State var yScale: GraphScale = .linear
     
-    var functions: [(Int, (BigDecimal) -> BigDecimal?, Color)] {
+    var functions: [(Int, ([Float]) -> Result<[Float], ExpressionError>, Color)] {
         return data.expressions.filter { expr in
             expr.isGraphed && expr.parameters?.count == 1
         }.map { expr in
             let varName: String = expr.parameters!.first!
             
-            return (expr.num, { expr.ast?.eval([varName: Literal(val: $0)], [:]) }, expr.graphColor ?? .blue)
+            let f: ([Float]) -> Result<[Float], ExpressionError> = { data in
+                let l = List(data: data.map({ d in
+                    Literal(val: BigDecimal(Double(d)))
+                }))
+                
+                if let ast = expr.ast {
+                    return ast.batch_eval([varName : l], [:])
+                } else {
+                    return .failure(.genericError(msg: "Expression failed to parse, cannot graph"))
+                }
+            }
+            
+            return (expr.num, f, expr.graphColor ?? .blue)
         }
     }
     
     var steps: Double {
-        1000.0 * pow(0.8, Double(functions.count))
+        300.0 * pow(0.95, Double(functions.count))
     }
     
     var body: some View {
