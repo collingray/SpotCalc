@@ -27,7 +27,7 @@ struct ScrollGradientOverlay: ViewModifier {
                                 }
                         }
                     )
-            }.defaultScrollAnchor(.bottom)
+            }//.defaultScrollAnchor(.bottom)
 
             VStack {
                 LinearGradient(

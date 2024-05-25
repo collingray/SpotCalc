@@ -40,11 +40,35 @@ struct GraphView: View {
         }
     }
     
+    var panView: some View {
+        RepresentablePanView()
+            .onScroll { event in
+                let dx = -Double(0.001*event.scrollingDeltaX) * (xMax - xMin)
+                let dy = Double(0.001*event.scrollingDeltaY) * (yMax - yMin)
+                dxMin += dx
+                dxMax += dx
+                dyMin += dy
+                dyMax += dy
+            }
+            .onScrollEnd { event in
+                xMin += dxMin
+                xMax += dxMax
+                yMin += dyMin
+                yMax += dyMax
+                
+                dxMin = 0
+                dxMax = 0
+                dyMin = 0
+                dyMax = 0
+            }
+    }
+    
     var body: some View {
         GeometryReader { proxy in
-            ChartView(functions: functions, steps: steps, xMin: $xMin, xMax: $xMax, yMin: $yMin, yMax: $yMax, xScale: $xScale)
+            ChartView(functions: functions, steps: steps, xMin: $xMin, xMax: $xMax, xScale: $xScale)
                 .chartXScale(domain: xDomain, type: xScale.scaleType())
                 .chartYScale(domain: yDomain, type: yScale.scaleType())
+                .overlay(panView)
                 .gesture(
                     MagnifyGesture()
                         .onChanged { value in
@@ -60,7 +84,8 @@ struct GraphView: View {
                                 dyMin = (1.0 - Double(offset.y)) * dy
                                 dyMax = -Double(offset.y) * dy
                             }
-                        }.onEnded { val in                            
+                            print("magnifying")
+                        }.onEnded { val in
                             xMin += dxMin
                             xMax += dxMax
                             yMin += dyMin
@@ -70,28 +95,31 @@ struct GraphView: View {
                             dxMax = 0
                             dyMin = 0
                             dyMax = 0
+                            print("magnify done")
                         }
-                ).highPriorityGesture(
-                    DragGesture()
-                        .onChanged { value in
-                            let dx = -Double(value.translation.width / proxy.size.width) * (xMax - xMin)
-                            let dy = Double(value.translation.height / proxy.size.height) * (yMax - yMin)
-                            dxMin = dx
-                            dxMax = dx
-                            dyMin = dy
-                            dyMax = dy
-                        }
-                        .onEnded { value in
-                            xMin += dxMin
-                            xMax += dxMax
-                            yMin += dyMin
-                            yMax += dyMax
-                            
-                            dxMin = 0
-                            dxMax = 0
-                            dyMin = 0
-                            dyMax = 0
-                        }
+//                ).highPriorityGesture(
+//                    DragGesture()
+//                        .onChanged { value in
+//                            let dx = -Double(value.translation.width / proxy.size.width) * (xMax - xMin)
+//                            let dy = Double(value.translation.height / proxy.size.height) * (yMax - yMin)
+//                            dxMin = dx
+//                            dxMax = dx
+//                            dyMin = dy
+//                            dyMax = dy
+//                            print("dragging")
+//                        }
+//                        .onEnded { value in
+//                            xMin += dxMin
+//                            xMax += dxMax
+//                            yMin += dyMin
+//                            yMax += dyMax
+//                            
+//                            dxMin = 0
+//                            dxMax = 0
+//                            dyMin = 0
+//                            dyMax = 0
+//                            print("dragging done")
+//                        }
                 ).onAppear {
                     yMin = xMin * Double(proxy.size.height / proxy.size.width)
                     yMax = xMax * Double(proxy.size.height / proxy.size.width)
@@ -113,8 +141,6 @@ struct ChartView: View {
         
     @Binding var xMin: Double
     @Binding var xMax: Double
-    @Binding var yMin: Double
-    @Binding var yMax: Double
     @Binding var xScale: GraphScale
     
     static let overdraw: Double = 2.0
@@ -153,7 +179,3 @@ struct ChartView: View {
         }
     }
 }
-
-//#Preview {
-//    GraphPanelView()
-//}

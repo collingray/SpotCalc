@@ -6,12 +6,11 @@ struct ExpressionsView: View {
     @Environment(ExpressionData.self) var data: ExpressionData
     
     var body: some View {
-        ForEach(Array(data.expressions.enumerated()), id: \.0) { i, expr in
-            ZStack {
-                ExpressionView(expression: expr, deleteExpression: {data.expressions.remove(at: i)})
-                    .padding([.top], 10)
-                    .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
-            }
+        ForEach(Array(data.expressions.enumerated()), id: \.element.num) { i, expr in
+            ExpressionView(expression: expr, deleteExpression: {data.expressions.remove(at: i)})
+                .padding([.top], 10)
+                .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }
@@ -87,7 +86,15 @@ struct ExpressionView: View {
                             } else {
                                 Spacer()
                             }
+                            
                         }.frame(width: 120, alignment: .bottomTrailing)
+                            .mask(alignment: .trailing) {
+                                if hovered {
+                                    LinearGradient(colors: [.black, .clear, .clear], startPoint: .leading, endPoint: .trailing)
+                                } else {
+                                    Color.black
+                                }
+                            }
                     }
                 }
             }
@@ -109,13 +116,25 @@ struct ExpressionView: View {
                     Spacer()
                     
                     Button(action: {
+                        let pasteboard = NSPasteboard.general
+                        pasteboard.clearContents()
+                        pasteboard.setString(expression.displayString, forType: .string)
+                    }) {
+                        Image(systemName: "doc.circle")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }.buttonStyle(BorderlessButtonStyle())
+                        .disabled(expression.isError)
+                        .help("Copy to clipboard")
+                    
+                    Button(action: {
                         if expression.isGraphed {
                             expression.disableGraph()
                         } else {
                             expression.enableGraph()
                         }
                     }) {
-                        if let graphColor = expression.graphColor {
+                        if let graphColor = expression.graphColor { // color is only present when graphed
                             Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
@@ -126,6 +145,8 @@ struct ExpressionView: View {
                                 .frame(width: 25, height: 25)
                         }
                     }.buttonStyle(BorderlessButtonStyle())
+                        .disabled(expression.isError)
+                        .help("Graph expression")
                     
                     Button(action: {
                         deleteExpression()
@@ -134,15 +155,10 @@ struct ExpressionView: View {
                             .resizable()
                             .frame(width: 25, height: 25)
                     }.buttonStyle(BorderlessButtonStyle())
+                        .help("Delete expression")
                 }
                 .fixedSize(horizontal: true, vertical: false)
                 .frame(maxHeight: .infinity)
-                
-                .padding(.leading, 50)
-                .background(
-                    VisualEffectView(material: .toolTip, blendingMode: .withinWindow)
-                        .mask(LinearGradient(colors: [.clear, .black, .black], startPoint: .leading, endPoint: .trailing))
-                )
             }
         }.frame(minHeight: 50)
         .onHover(perform: { hovering in
@@ -174,8 +190,3 @@ struct LaTeXImage: View {
         }
     }
 }
-
-
-//#Preview {
-//    MainView()
-//}

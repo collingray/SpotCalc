@@ -18,7 +18,7 @@ class Parser {
         
         let pattern = """
         (?x)
-        (-?\\d+(\\.\\d+)?(e(-|\\+)?\\d+)?) | # Numbers (including negatives, decimals, and exponential notation)
+        (\\d+(\\.\\d+)?(e(-|\\+)?\\d+)?) | # Numbers (including decimals and exponential notation)
         (\\*\\*) |               # Alternate power
         (//) |                   # Floor divide
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)

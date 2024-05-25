@@ -7,23 +7,21 @@ struct MainView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollViewReader { proxy in
-                VStack(alignment: .leading) {
-                    ExpressionsView()
-                }.frame(maxWidth: .infinity)
-                    .padding()
-                    .rotationEffect(Angle(degrees: 180))
-                    .onChange(of: data.count) { oldValue, newValue in
+            
+            GeometryReader { reader in
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ExpressionsView()
+                        }.frame(minHeight: reader.size.height, alignment: .bottom)
+                            .padding(.horizontal)
+                    }.onChange(of: data.count) { oldValue, newValue in
                         if newValue > oldValue {
-                            proxy.scrollTo(newValue-1, anchor: .bottom)
+                            proxy.scrollTo(newValue-1, anchor: .top)
                         }
                     }
-            }.modifier(ScrollGradientOverlay())
-                .frame(maxHeight: .infinity)
-                .defaultScrollAnchor(.bottom)
-                .rotationEffect(Angle(degrees: 180))
-                
-                
+                }
+            }
             
             TextField("Enter expression", text: $expressionText)
                 .padding()

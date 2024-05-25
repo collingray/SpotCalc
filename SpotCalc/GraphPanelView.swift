@@ -43,7 +43,7 @@ struct GraphPanelView: View {
     }
     
     var steps: Double {
-        1000.0 * pow(0.95, Double(functions.count))
+        300.0 * pow(0.95, Double(functions.count))
     }
     
     var body: some View {
@@ -116,7 +116,3 @@ enum GraphScale {
         }
     }
 }
-
-//#Preview {
-//    GraphPanelView()
-//}

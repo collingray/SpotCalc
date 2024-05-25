@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.delegate = self
             window.isOpaque = false
             window.backgroundColor = .clear
-//            window.isMovableByWindowBackground = true
+            window.isMovableByWindowBackground = true
             window.level = .floating
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F003E2DD2C025859004E528C /* PanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2DC2C025859004E528C /* PanView.swift */; };
 		F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */; };
 		F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* MainView.swift */; };
 		F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F003E2DC2C025859004E528C /* PanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanView.swift; sourceTree = "<group>"; };
 		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
 		F0F1F4C82BF93E9F0016C79B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */,
 				F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */,
 				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
+				F003E2DC2C025859004E528C /* PanView.swift */,
 				F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */,
 				F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */,
 				F0F1F4CC2BF93E9F0016C79B /* Preview Content */,
@@ -315,6 +318,7 @@
 			files = (
 				F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */,
 				F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */,
+				F003E2DD2C025859004E528C /* PanView.swift in Sources */,
 				F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */,
 				F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */,
 				F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */,
