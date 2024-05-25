@@ -586,7 +586,7 @@ struct Factorial: UnaryExpression {
             return nil
         }
         
-        return .full_gamma(v+1, .decimal128)
+        return .full_factorial(v, .decimal128)
     }
     
     func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
@@ -1206,7 +1206,7 @@ extension vForce {
         var acc = [Float](repeating: lanczos_p[0], count: vector.count)
         
         for i in 1..<self.lanczos_n {
-            acc = vDSP.divide(lanczos_p[i], vDSP.add(Float(i), vector))
+            vDSP.add(vDSP.divide(lanczos_p[i], vDSP.add(Float(i), vector)), acc, result: &acc)
         }
         
         return acc
@@ -1221,8 +1221,8 @@ extension vForce {
     }
     
     static func gamma<U>(_ vector: U) -> [Float] where U : AccelerateBuffer, U.Element == Float {
-        let dirMask = vForce.copysign(magnitudes: [Float](repeating: 1.0, count: vector.count), signs: vDSP.add(0.5, vector)) // -1 if <0.5, else +1
-        let bitMask = vDSP.divide(vDSP.add(-1, dirMask), -2) // 1 if <0.5, else 0
+        let dirMask = vForce.copysign(magnitudes: [Float](repeating: 1.0, count: vector.count), signs: vDSP.add(-0.5, vector)) // -1 if <0.5, else +1
+        let bitMask = vDSP.absolute(vDSP.divide(vDSP.add(-1, dirMask), 2)) // 1 if <0.5, else 0
         
         var buf: [Float] = vector as! [Float]
         vDSP.multiply(dirMask, buf, result: &buf) // -z
