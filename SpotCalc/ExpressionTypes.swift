@@ -217,7 +217,7 @@ struct Function: Expression {
     }
 }
 
-struct List: Expression {
+struct Vector: Expression {
     var data: [Expression]
     
     func apply(_ variables: [String : any Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
@@ -226,7 +226,7 @@ struct List: Expression {
         }
         
         if newData.count == data.count {
-            return List(data: newData)
+            return Vector(data: newData)
         } else {
             return nil
         }

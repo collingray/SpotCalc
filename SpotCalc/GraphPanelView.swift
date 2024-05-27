@@ -27,7 +27,7 @@ struct GraphPanelView: View {
             let varName: String = expr.parameters!.first!
             
             let f: ([Float]) -> Result<[Float], ExpressionError> = { data in
-                let l = List(data: data.map({ d in
+                let l = Vector(data: data.map({ d in
                     Literal(val: BigDecimal(Double(d)))
                 }))
                 

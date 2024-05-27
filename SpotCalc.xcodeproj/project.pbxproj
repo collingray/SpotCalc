@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		F003E2DD2C025859004E528C /* PanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2DC2C025859004E528C /* PanView.swift */; };
+		F003E2DF2C029504004E528C /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2DE2C029504004E528C /* MenuBarView.swift */; };
+		F003E2E12C029C7D004E528C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2E02C029C7D004E528C /* SettingsView.swift */; };
+		F003E2E42C02A602004E528C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = F003E2E32C02A602004E528C /* KeyboardShortcuts */; };
+		F003E2E62C02A63C004E528C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2E52C02A63C004E528C /* Constants.swift */; };
 		F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */; };
 		F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* MainView.swift */; };
 		F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */; };
@@ -51,6 +55,9 @@
 
 /* Begin PBXFileReference section */
 		F003E2DC2C025859004E528C /* PanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanView.swift; sourceTree = "<group>"; };
+		F003E2DE2C029504004E528C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		F003E2E02C029C7D004E528C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F003E2E52C02A63C004E528C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
 		F0F1F4C82BF93E9F0016C79B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -80,6 +87,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F1F5012BF99E1C0016C79B /* RealModule in Frameworks */,
+				F003E2E42C02A602004E528C /* KeyboardShortcuts in Frameworks */,
 				F0FC47912BFE9F0F00DA8BE3 /* BigDecimal in Frameworks */,
 				F0F1F4F42BF96A8A0016C79B /* LaTeXSwiftUI in Frameworks */,
 				F0FC478E2BFE9A1300DA8BE3 /* BigDecimal in Frameworks */,
@@ -135,11 +143,14 @@
 				F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */,
 				F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */,
 				F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */,
+				F003E2E02C029C7D004E528C /* SettingsView.swift */,
 				F0F1F5082BFAC96D0016C79B /* GraphView.swift */,
 				F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */,
 				F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */,
 				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
 				F003E2DC2C025859004E528C /* PanView.swift */,
+				F003E2E52C02A63C004E528C /* Constants.swift */,
+				F003E2DE2C029504004E528C /* MenuBarView.swift */,
 				F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */,
 				F0F1F4CF2BF93E9F0016C79B /* SpotCalc.entitlements */,
 				F0F1F4CC2BF93E9F0016C79B /* Preview Content */,
@@ -196,6 +207,7 @@
 				F0F1F5002BF99E1C0016C79B /* RealModule */,
 				F0FC478D2BFE9A1300DA8BE3 /* BigDecimal */,
 				F0FC47902BFE9F0F00DA8BE3 /* BigDecimal */,
+				F003E2E32C02A602004E528C /* KeyboardShortcuts */,
 			);
 			productName = SpotCalc;
 			productReference = F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */;
@@ -273,6 +285,7 @@
 				F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */,
 				F0F1F4FB2BF99E1C0016C79B /* XCRemoteSwiftPackageReference "swift-numerics" */,
 				F0FC478F2BFE9F0F00DA8BE3 /* XCRemoteSwiftPackageReference "BigDecimal" */,
+				F003E2E22C02A602004E528C /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = F0F1F4C42BF93E9F0016C79B /* Products */;
 			projectDirPath = "";
@@ -325,8 +338,11 @@
 				F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */,
 				F0F1F50B2BFAF75A0016C79B /* ContentView.swift in Sources */,
 				F0F1F5072BFAA7FA0016C79B /* ExpressionData.swift in Sources */,
+				F003E2DF2C029504004E528C /* MenuBarView.swift in Sources */,
 				F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */,
+				F003E2E62C02A63C004E528C /* Constants.swift in Sources */,
 				F0F1F5092BFAC96D0016C79B /* GraphView.swift in Sources */,
+				F003E2E12C029C7D004E528C /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +416,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CSG84864FN;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -464,6 +481,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CSG84864FN;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -490,16 +508,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SpotCalc/SpotCalc.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
 				DEVELOPMENT_TEAM = CSG84864FN;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpotCalc/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpotCalc;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Needed to use hotkey";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -520,16 +541,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SpotCalc/SpotCalc.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotCalc/Preview Content\"";
 				DEVELOPMENT_TEAM = CSG84864FN;
-				ENABLE_HARDENED_RUNTIME = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpotCalc/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SpotCalc;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "Needed to use hotkey";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -662,6 +686,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F003E2E22C02A602004E528C /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
 		F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/colinc86/LaTeXSwiftUI";
@@ -689,6 +721,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F003E2E32C02A602004E528C /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F003E2E22C02A602004E528C /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
 		F0F1F4F32BF96A8A0016C79B /* LaTeXSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F0F1F4F22BF96A8A0016C79B /* XCRemoteSwiftPackageReference "LaTeXSwiftUI" */;

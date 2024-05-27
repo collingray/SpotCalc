@@ -158,9 +158,10 @@ struct ExpressionView: View {
                         .help("Delete expression")
                 }
                 .fixedSize(horizontal: true, vertical: false)
-                .frame(maxHeight: .infinity)
             }
-        }.frame(minHeight: 50)
+        }
+        .frame(minHeight: 50, maxHeight: .infinity)
+        .padding(.bottom, 10)
         .onHover(perform: { hovering in
             hovered = hovering
         })

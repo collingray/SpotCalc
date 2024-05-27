@@ -84,7 +84,6 @@ struct GraphView: View {
                                 dyMin = (1.0 - Double(offset.y)) * dy
                                 dyMax = -Double(offset.y) * dy
                             }
-                            print("magnifying")
                         }.onEnded { val in
                             xMin += dxMin
                             xMax += dxMax
@@ -95,7 +94,6 @@ struct GraphView: View {
                             dxMax = 0
                             dyMin = 0
                             dyMax = 0
-                            print("magnify done")
                         }
 //                ).highPriorityGesture(
 //                    DragGesture()

@@ -4,6 +4,7 @@ import AppKit
 @main
 struct SpotCalcApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
     
     var body: some Scene {
         WindowGroup {
@@ -13,6 +14,14 @@ struct SpotCalcApp: App {
                 .edgesIgnoringSafeArea(.top)
         }
         .windowResizability(.contentSize)
+        
+        Settings {
+            SettingsView()
+        }
+        
+        MenuBarExtra("SpotCalc Menu Bar", systemImage: "function") {
+            MenuBarView()
+        }
     }
 }
 
@@ -23,6 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         if let window = NSApplication.shared.windows.first {
             self.window = window
             
+            window.setContentSize(.init(width: 600, height: 400))
             window.center()
             window.delegate = self
             window.isOpaque = false
@@ -37,6 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             window.styleMask.insert([.resizable, .fullSizeContentView])
             window.invalidateShadow()
+            window.makeKeyAndOrderFront(nil)
             //            window.minSize = NSSize(width: 600, height: 100)  // Minimum size to maintain a fixed width
             //            window.maxSize = NSSize(width: 600, height: CGFloat.greatestFiniteMagnitude)  // Maximum height to allow vertical resizing
             
