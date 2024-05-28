@@ -38,7 +38,7 @@ struct GraphPanelView: View {
                 }
             }
             
-            return (expr.num, f, expr.graphColor ?? .blue)
+            return (expr.id, f, expr.graphColor ?? .blue)
         }
     }
     

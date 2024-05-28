@@ -12,6 +12,12 @@
 		F003E2E12C029C7D004E528C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2E02C029C7D004E528C /* SettingsView.swift */; };
 		F003E2E42C02A602004E528C /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = F003E2E32C02A602004E528C /* KeyboardShortcuts */; };
 		F003E2E62C02A63C004E528C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2E52C02A63C004E528C /* Constants.swift */; };
+		F003E2EA2C040EFC004E528C /* DefinitionsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2E92C040EFC004E528C /* DefinitionsSettingsView.swift */; };
+		F003E2EC2C040F44004E528C /* DataSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2EB2C040F44004E528C /* DataSettingsView.swift */; };
+		F003E2EE2C040F5A004E528C /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2ED2C040F5A004E528C /* AppearanceSettingsView.swift */; };
+		F003E2F02C040F87004E528C /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2EF2C040F87004E528C /* GeneralSettingsView.swift */; };
+		F003E2F22C040FA4004E528C /* ShortcutsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2F12C040FA4004E528C /* ShortcutsSettingsView.swift */; };
+		F003E2F42C050515004E528C /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F003E2F32C050515004E528C /* SettingsData.swift */; };
 		F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */; };
 		F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4C82BF93E9F0016C79B /* MainView.swift */; };
 		F0F1F4CB2BF93E9F0016C79B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0F1F4CA2BF93E9F0016C79B /* Assets.xcassets */; };
@@ -58,6 +64,12 @@
 		F003E2DE2C029504004E528C /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		F003E2E02C029C7D004E528C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F003E2E52C02A63C004E528C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		F003E2E92C040EFC004E528C /* DefinitionsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinitionsSettingsView.swift; sourceTree = "<group>"; };
+		F003E2EB2C040F44004E528C /* DataSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSettingsView.swift; sourceTree = "<group>"; };
+		F003E2ED2C040F5A004E528C /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
+		F003E2EF2C040F87004E528C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		F003E2F12C040FA4004E528C /* ShortcutsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsSettingsView.swift; sourceTree = "<group>"; };
+		F003E2F32C050515004E528C /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
 		F0F1F4C82BF93E9F0016C79B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -113,6 +125,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F003E2E82C040EC8004E528C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F003E2E02C029C7D004E528C /* SettingsView.swift */,
+				F003E2F32C050515004E528C /* SettingsData.swift */,
+				F003E2EF2C040F87004E528C /* GeneralSettingsView.swift */,
+				F003E2F12C040FA4004E528C /* ShortcutsSettingsView.swift */,
+				F003E2ED2C040F5A004E528C /* AppearanceSettingsView.swift */,
+				F003E2E92C040EFC004E528C /* DefinitionsSettingsView.swift */,
+				F003E2EB2C040F44004E528C /* DataSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		F003E2F52C05432B004E528C /* Expression */ = {
+			isa = PBXGroup;
+			children = (
+				F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */,
+				F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */,
+				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
+			);
+			path = Expression;
+			sourceTree = "<group>";
+		};
 		F0F1F4BA2BF93E9F0016C79B = {
 			isa = PBXGroup;
 			children = (
@@ -136,18 +172,16 @@
 		F0F1F4C52BF93E9F0016C79B /* SpotCalc */ = {
 			isa = PBXGroup;
 			children = (
+				F003E2E82C040EC8004E528C /* Settings */,
 				F0F1F4F12BF940BD0016C79B /* Info.plist */,
 				F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */,
 				F0F1F4C82BF93E9F0016C79B /* MainView.swift */,
 				F0F1F50A2BFAF75A0016C79B /* ContentView.swift */,
 				F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */,
 				F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */,
-				F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */,
-				F003E2E02C029C7D004E528C /* SettingsView.swift */,
 				F0F1F5082BFAC96D0016C79B /* GraphView.swift */,
-				F0F1F5062BFAA7FA0016C79B /* ExpressionData.swift */,
+				F003E2F52C05432B004E528C /* Expression */,
 				F0F1F50C2BFB1FD00016C79B /* GraphPanelView.swift */,
-				F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */,
 				F003E2DC2C025859004E528C /* PanView.swift */,
 				F003E2E52C02A63C004E528C /* Constants.swift */,
 				F003E2DE2C029504004E528C /* MenuBarView.swift */,
@@ -331,15 +365,21 @@
 			files = (
 				F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */,
 				F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */,
+				F003E2F02C040F87004E528C /* GeneralSettingsView.swift in Sources */,
+				F003E2F22C040FA4004E528C /* ShortcutsSettingsView.swift in Sources */,
 				F003E2DD2C025859004E528C /* PanView.swift in Sources */,
 				F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */,
+				F003E2EA2C040EFC004E528C /* DefinitionsSettingsView.swift in Sources */,
 				F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */,
 				F0F1F4C92BF93E9F0016C79B /* MainView.swift in Sources */,
+				F003E2EC2C040F44004E528C /* DataSettingsView.swift in Sources */,
 				F0F1F5032BF9A4010016C79B /* ExpressionParser.swift in Sources */,
 				F0F1F50B2BFAF75A0016C79B /* ContentView.swift in Sources */,
 				F0F1F5072BFAA7FA0016C79B /* ExpressionData.swift in Sources */,
 				F003E2DF2C029504004E528C /* MenuBarView.swift in Sources */,
 				F0F1F4C72BF93E9F0016C79B /* SpotCalcApp.swift in Sources */,
+				F003E2EE2C040F5A004E528C /* AppearanceSettingsView.swift in Sources */,
+				F003E2F42C050515004E528C /* SettingsData.swift in Sources */,
 				F003E2E62C02A63C004E528C /* Constants.swift in Sources */,
 				F0F1F5092BFAC96D0016C79B /* GraphView.swift in Sources */,
 				F003E2E12C029C7D004E528C /* SettingsView.swift in Sources */,

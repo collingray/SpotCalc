@@ -5,6 +5,7 @@ import AppKit
 struct SpotCalcApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
+    @State private var settingsData = SettingsData()
     
     var body: some Scene {
         WindowGroup {
@@ -17,6 +18,7 @@ struct SpotCalcApp: App {
         
         Settings {
             SettingsView()
+                .environment(settingsData)
         }
         
         MenuBarExtra("SpotCalc Menu Bar", systemImage: "function") {

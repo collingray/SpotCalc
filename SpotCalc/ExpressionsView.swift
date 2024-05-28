@@ -6,7 +6,7 @@ struct ExpressionsView: View {
     @Environment(ExpressionData.self) var data: ExpressionData
     
     var body: some View {
-        ForEach(Array(data.expressions.enumerated()), id: \.element.num) { i, expr in
+        ForEach(Array(data.expressions.enumerated()), id: \.element.id) { i, expr in
             ExpressionView(expression: expr, deleteExpression: {data.expressions.remove(at: i)})
                 .padding([.top], 10)
                 .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
@@ -16,7 +16,7 @@ struct ExpressionsView: View {
 }
 
 struct ExpressionView: View {
-    @Bindable var expression: ParsedExpression
+    @Bindable var expression: DisplayExpression
     
     let deleteExpression: () -> ()
     
@@ -49,23 +49,23 @@ struct ExpressionView: View {
                 } else {
                     HStack {
                         Group {
-                            if let parameters = expression.parameters {
-                                LaTeXImage(text: "f_{\(expression.num)}(\(parameters.joined(separator: ", "))) =", maxWidth: 120)
-                                    .foregroundStyle(.gray)
-                            } else {
-                                LaTeXImage(text: "x_{\(expression.num)} =", maxWidth: 120)
-                                    .foregroundStyle(.gray)
+                            if let definitionLatex: String = expression.definitionLatex {
+                                
+                                LaTeXImage(text: definitionLatex, maxWidth: 120)
+//                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(.red)
                             }
                         }
                         .frame(width: 120, alignment: .leading)
                         
                         HStack {
-                            if expression.isError {
-                                Text(expression.displayString)
+                            if let bodyLatex = expression.bodyLatex {
+                                LaTeXImage(text: bodyLatex, maxWidth: 312)
+                                    .foregroundStyle(.primary)
+                            } else {
+                                Text(expression.expressionString)
                                     .font(.title)
                                     .underline(pattern: .solid, color: .red)
-                            } else {
-                                LaTeXImage(text: expression.displayString, maxWidth: 312)
                             }
                         }
                             .frame(maxWidth: .infinity, alignment: .center)
@@ -80,7 +80,7 @@ struct ExpressionView: View {
                         
                         
                         Group {
-                            if let value = expression.value?.description {
+                            if let value = expression.eval([:], functions: [:])?.description {
                                 LaTeXImage(text: "= \(value)", maxWidth: 120)
                                     .foregroundStyle(.gray)
                             } else {
@@ -118,7 +118,7 @@ struct ExpressionView: View {
                     Button(action: {
                         let pasteboard = NSPasteboard.general
                         pasteboard.clearContents()
-                        pasteboard.setString(expression.displayString, forType: .string)
+                        pasteboard.setString(expression.bodyLatex ?? expression.expressionString, forType: .string)
                     }) {
                         Image(systemName: "doc.circle")
                             .resizable()
@@ -169,12 +169,26 @@ struct ExpressionView: View {
 }
 
 struct LaTeXImage: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let text: String
     let maxWidth: Int
+    let secondary: Bool = false
+    var color: Color {
+        switch colorScheme {
+        case .light:
+            secondary ? .gray : .black
+        case .dark:
+            secondary ? .gray : .white
+        default:
+            secondary ? .gray : .black
+        }
+    }
     
     var body: some View {
         let latex = LaTeX(text)
             .parsingMode(.all)
+            .foregroundStyle(color)
             .font(.largeTitle)
         let renderer = ImageRenderer(content: latex)
         let _ = (renderer.scale = renderer.scale * 5)

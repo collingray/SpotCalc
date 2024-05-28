@@ -22,7 +22,7 @@ class ComplexExpressionTests: XCTestCase {
     
     func testTokenization() {
         testTokenization("2 + 3 * (5 - 1)", expected: ["2", "+", "3", "*", "(", "5", "-", "1", ")"])
-        testTokenization("abs(-1.1) + sqrt(4) * 3", expected: ["abs", "(", "-1.1", ")", "+", "sqrt", "(", "4", ")", "*", "3"])
+        testTokenization("abs(-1.1) + sqrt(4) * 3", expected: ["abs", "(", "-", "1.1", ")", "+", "sqrt", "(", "4", ")", "*", "3"])
         testTokenization("2 * (8 + 1)", expected: ["2", "*", "(", "8", "+", "1", ")"])
         testTokenization("3 + 5 * (2 - 8) / 2", expected: ["3", "+", "5", "*", "(", "2", "-", "8", ")", "/", "2"])
         testTokenization("log(10) + ln(exp(1))", expected: ["log", "(", "10", ")", "+", "ln", "(", "exp", "(", "1", ")", ")"])

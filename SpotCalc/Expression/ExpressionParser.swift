@@ -24,6 +24,7 @@ class Parser {
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)
         ([\\(\\)]) |             # Parentheses
         \\b(abs|fabs|log|ln|exp|sqrt|cbrt|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan|arcsinh|arccosh|arctanh|ceil|floor|round)\\b | # Functions
+        (,) |
         (!) |                    # Factorial
         (%|\\bmod\\b) |          # Modulus
         \\b(mph|hours|miles|km|kilometers|deg|degrees|radians|%)\\b | # Units and percentage
@@ -47,7 +48,66 @@ class Parser {
     }
     
     private func parseExpression() throws -> Expression {
-        return try parseTerm()
+        if let expression = try? parseDefinition() {
+            return expression
+        } else {
+            reset()
+            return try parseTerm()
+        }
+    }
+    
+    static let symbolRegex = /[a-zA-Z]\w*/
+    private func parseDefinition() throws -> Expression {
+        if let name = currentToken, try Parser.symbolRegex.wholeMatch(in: name) != nil {
+            advance()
+            if currentToken == "(" {
+                advance()
+                var args: [String] = []
+                if let token = currentToken, try Parser.symbolRegex.wholeMatch(in: token) != nil {
+                    args.append(token)
+                } else {
+                    throw ParserError.invalidSyntax
+                }
+                
+                advance()
+                while let token = currentToken, token == "," {
+                    advance()
+                    if let token = currentToken, try Parser.symbolRegex.wholeMatch(in: token) != nil {
+                        args.append(token)
+                        advance()
+                    } else {
+                        throw ParserError.invalidSyntax
+                    }
+                }
+                
+                guard currentToken == ")" else {
+                    throw ParserError.invalidSyntax
+                }
+                
+                advance()
+                guard currentToken == "=" else {
+                    throw ParserError.invalidSyntax
+                }
+                
+                advance()
+                let definition = try parseTerm()
+                
+                return FunctionDefinition(name: name, args: args, body: definition)
+            } else {
+                guard currentToken == "=" else {
+                    throw ParserError.invalidSyntax
+                }
+                
+                advance()
+                let definition = try parseTerm()
+                
+                return VariableDefinition(name: name, body: definition)
+            }
+            
+            
+        } else {
+            throw ParserError.invalidSyntax
+        }
     }
 
     static let termSymbols = ["+", "-"]
@@ -165,12 +225,11 @@ class Parser {
     }
     
     static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round"]
-    static let symbolRegex = /[a-zA-Z]\w*/
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
             if token == "(" {
                 advance()
-                let expr = try parseExpression()
+                let expr = try parseTerm()
                 guard currentToken == ")" else {
                     throw ParserError.invalidSyntax
                 }
@@ -182,7 +241,7 @@ class Parser {
                     throw ParserError.invalidSyntax
                 }
                 advance()
-                let expr = try parseExpression()
+                let expr = try parseTerm()
                 guard currentToken == ")" else {
                     throw ParserError.invalidSyntax
                 }
@@ -218,11 +277,11 @@ class Parser {
                     return Variable(name: token)
                 }
                 advance()
-                var exprs: [Expression] = [try parseExpression()]
+                var exprs: [Expression] = [try parseTerm()]
                 
                 while let token = currentToken, token == "," {
                     advance()
-                    exprs.append(try parseExpression())
+                    exprs.append(try parseTerm())
                 }
                 
                 guard currentToken == ")" else {
@@ -243,5 +302,9 @@ class Parser {
 
     private func advance() {
         index += 1
+    }
+    
+    private func reset() {
+        index = 0
     }
 }

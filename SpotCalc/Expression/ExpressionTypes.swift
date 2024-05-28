@@ -112,6 +112,22 @@ extension BinaryExpression {
     }
 }
 
+protocol Definition: Expression {
+    var name: String { get }
+    var body: Expression { get }
+    func renderLatexDefinition() -> String
+}
+
+extension Definition {
+    func renderLatexBody() -> String {
+        body.renderLatex()
+    }
+    
+    func renderLatex() -> String {
+        "\(renderLatexDefinition()) = \(renderLatexBody())"
+    }
+}
+
 struct Literal: Expression {
     let val: BigDecimal
     
@@ -213,14 +229,22 @@ struct Function: Expression {
     }
     
     func printTree() -> String {
-        "\(name)(...)"
+        if let last = args.last {
+            return """
+            \(name)(...)
+            \(args.dropLast().map{ "├── \($0.printTree().replacingOccurrences(of: "\n", with: "\n|   "))" }.joined(separator: "\n"))
+            └── \(last.printTree().replacingOccurrences(of: "\n", with: "\n    "))
+            """
+        } else {
+            return "\(name)()"
+        }
     }
 }
 
 struct Vector: Expression {
     var data: [Expression]
     
-    func apply(_ variables: [String : any Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
+    func apply(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
         let newData = data.compactMap { expr in
             expr.apply(variables, functions)
         }
@@ -259,7 +283,109 @@ struct Vector: Expression {
     }
     
     func printTree() -> String {
-        "[]"
+        if let last = data.last {
+            return """
+            []
+            \(data.dropLast().map{ "├── \($0.printTree().replacingOccurrences(of: "\n", with: "\n|   "))" }.joined(separator: "\n"))
+            └── \(last.printTree().replacingOccurrences(of: "\n", with: "\n    "))
+            """
+        } else {
+            return "[]"
+        }
+    }
+}
+
+struct FunctionDefinition: Definition {
+    let name: String
+    var args: [String]
+    var body: Expression
+    
+    func apply(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
+        var copy = self
+        if let body2 = copy.body.apply(variables, functions) {
+            copy.body = body2
+            copy.args = args.filter( {!variables.keys.contains($0)} )
+        }
+        
+        return copy
+    }
+
+    func eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> BigDecimal? {
+        if args.allSatisfy( {variables.keys.contains($0)} ) {
+            return body.eval(variables, functions)
+        } else {
+            return nil
+        }
+    }
+    
+    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
+        let missingArgs = args.filter( {!variables.keys.contains($0)} )
+        
+        if missingArgs.isEmpty {
+            return body.batch_eval(variables, functions)
+        } else {
+            return .failure(.errorList(errors: missingArgs.map( {.missingSymbol(type: "argument", name: $0)} )))
+        }
+    }
+    
+    func getVariables() -> [String] {
+        body.getVariables()
+    }
+    
+    func getFunctions() -> [String] {
+        body.getFunctions()
+    }
+    
+    func renderLatexDefinition() -> String {
+        "\\operatorname{\(name)}{(\(args.joined(separator: ", ")))}"
+    }
+    
+    func printTree() -> String {
+        return """
+        \(name)(\(args.joined(separator: ", ")))=
+        └── \(body.printTree().replacingOccurrences(of: "\n", with: "\n    "))
+        """
+    }
+}
+
+struct VariableDefinition: Definition {
+    let name: String
+    var body: Expression
+    
+    func apply(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
+        var copy = self
+        if let body2 = copy.body.apply(variables, functions) {
+            copy.body = body2
+        }
+        
+        return copy
+    }
+
+    func eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> BigDecimal? {
+        return body.eval(variables, functions)
+    }
+    
+    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
+        return body.batch_eval(variables, functions)
+    }
+    
+    func getVariables() -> [String] {
+        body.getVariables()
+    }
+    
+    func getFunctions() -> [String] {
+        body.getFunctions()
+    }
+    
+    func renderLatexDefinition() -> String {
+        name
+    }
+    
+    func printTree() -> String {
+        return """
+        \(name)=
+        └── \(body.printTree().replacingOccurrences(of: "\n", with: "\n    "))
+        """
     }
 }
 

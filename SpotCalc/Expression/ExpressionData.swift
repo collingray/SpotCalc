@@ -11,9 +11,9 @@ import BigDecimal
 
 @Observable 
 class ExpressionData {
-    var expressions: [ParsedExpression]
+    var expressions: [DisplayExpression]
     
-    init(_ expressions: [ParsedExpression] = []) {
+    init(_ expressions: [DisplayExpression] = []) {
         self.expressions = expressions
     }
     
@@ -29,8 +29,8 @@ class ExpressionData {
     
     var variables: [String : BigDecimal] {
         let vars = self.expressions.compactMap { expression in
-            if let val = expression.value {
-                return ("x\(expression.num)", val)
+            if let val = expression.eval([:], functions: [:]), let name = expression.name {
+                return (name, val)
             } else {
                 return nil
             }
@@ -41,8 +41,8 @@ class ExpressionData {
     
     var functions: [String : ([Expression]) -> Expression?] {
         let funcs = self.expressions.compactMap { expression in
-            if let f = expression.function {
-                return ("f\(expression.num)", f)
+            if let f = expression.function, let name = expression.name {
+                return (name, f)
             } else {
                 return nil
             }
@@ -53,28 +53,33 @@ class ExpressionData {
 }
 
 @Observable
-class ParsedExpression {
-    let num: Int
-    
-    var ast: Expression?
-    
-    var expressionString: String
-    var displayString: String
-    var value: BigDecimal?
-    
-    var parameters: [String]?
-    var function: (([Expression]) -> Expression?)?
-    
+class DisplayExpression: ParsedExpression {
     var graphColor: Color?
+    
     var isGraphed: Bool {
         graphColor != nil
     }
     
-    var isError: Bool {
-        ast == nil
+    var definitionLatex: String? {
+        if let name = name {
+            if let params = parameters {
+                return "\(name)(\(params.joined(separator: ","))) ="
+            } else {
+                return "\(name) ="
+            }
+        } else {
+            return nil
+        }
     }
     
-    static var total_count = 0
+    var bodyLatex: String? {
+        if let expression = ast as? Definition? {
+            return expression?.body.renderLatex()
+        } else {
+            return ast?.renderLatex()
+        }
+    }
+    
     static let possible_colors: [Color] = [
         .pink,
         .brown,
@@ -91,17 +96,66 @@ class ParsedExpression {
     ]
     static var available_colors: [Color] = possible_colors
     
+//    init(_ expression: String) throws {
+//        self.expression = try ParsedExpression(expression)
+//    }
+    
+//    func updateExpression(_ newExpression: String) {
+//        expression.updateExpression(newExpression)
+//    }
+    
+    func enableGraph() {
+        if let color = DisplayExpression.available_colors.popLast() {
+            graphColor = color
+        }
+    }
+    
+    func disableGraph() {
+        if let color = graphColor {
+            DisplayExpression.available_colors.append(color)
+            graphColor = nil
+        }
+    }
+}
+
+@Observable
+class ParsedExpression: Identifiable {
+    let id: Int
+    
+    var ast: Expression?
+    var expressionString: String
+    var parameters: [String]?
+    var function: (([Expression]) -> Expression?)?
+    
+    var name: String? {
+        if isError {
+            return nil
+        } else {
+            if let ast = ast as? Definition {
+                return ast.name
+            } else {
+                return (isFunc ? "f" : "x") + id.description
+            }
+        }
+    }
+    
+    var isError: Bool {
+        ast == nil
+    }
+    
+    var isFunc: Bool {
+        parameters != nil
+    }
+    
+    static var total_count = 0
+    
     init(_ expression: String) throws {
-        num = ParsedExpression.total_count
+        id = ParsedExpression.total_count
         ParsedExpression.total_count += 1
+        
         expressionString = expression
         let parser = Parser(expression: expression)
-        let parsed = try? parser.parse()
-        ast = parsed
-        
-        let latexString = parsed?.renderLatex()
-        displayString = latexString ?? expression
-        value = ast?.eval([:], [:])
+        ast = try? parser.parse()
         
         if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
             parameters = params
@@ -122,10 +176,6 @@ class ParsedExpression {
             let parser = Parser(expression: expressionString)
             ast = try? parser.parse()
             
-            let latexString = ast?.renderLatex()
-            displayString = latexString ?? expressionString
-            value = ast?.eval([:], [:])
-            
             if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
                 parameters = params
                 function = f
@@ -140,16 +190,7 @@ class ParsedExpression {
         }
     }
     
-    func enableGraph() {
-        if let color = ParsedExpression.available_colors.popLast() {
-            graphColor = color
-        }
-    }
-    
-    func disableGraph() {
-        if let color = graphColor {
-            ParsedExpression.available_colors.append(color)
-            graphColor = nil
-        }
+    func eval(_ variables: [String: Expression], functions: [String : ([Expression]) -> Expression?]) -> BigDecimal? {
+        return ast?.eval(variables, functions)
     }
 }

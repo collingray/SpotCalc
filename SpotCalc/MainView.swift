@@ -32,7 +32,7 @@ struct MainView: View {
                 .overlay(Rectangle().frame(width: nil, height: 1, alignment: .top).foregroundColor(Color.secondary), alignment: .top)
                 .onSubmit {
                     if expressionText != "" {
-                        if let newExpression = try? ParsedExpression(expressionText) {
+                        if let newExpression = try? DisplayExpression(expressionText) {
                             data.expressions.append(newExpression)
                             expressionText = ""
                         }
