@@ -8,12 +8,12 @@ enum ParserError: Error {
 class Parser {
     var tokens: [String]
     private var index = 0
-
+    
     init(expression: String) {
         self.tokens = Parser.tokenize(expression)
         print("tokens: \(self.tokens)")
     }
-
+    
     static func tokenize(_ expression: String) -> [String] {
         
         let pattern = """
@@ -31,13 +31,13 @@ class Parser {
         (\\)) |                  # Implied multiplication (e.g., 2(8+1))
         ([a-zA-Z]\\w*)           # Variables (e.g., e, pi)
         """
-
+        
         let regex = try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive, .allowCommentsAndWhitespace])
         let nsString = expression as NSString
         let results = regex.matches(in: expression, range: NSRange(location: 0, length: nsString.length))
         return results.map { nsString.substring(with: $0.range) }
     }
-
+    
     func parse() throws -> Expression {
         let expr = try parseExpression()
         if currentToken != nil {
@@ -59,12 +59,14 @@ class Parser {
     static let symbolRegex = /[a-zA-Z]\w*/
     private func parseDefinition() throws -> Expression {
         if let name = currentToken, try Parser.symbolRegex.wholeMatch(in: name) != nil {
+            let name = Parser.formatSubscript(name)
+            
             advance()
             if currentToken == "(" {
                 advance()
                 var args: [String] = []
                 if let token = currentToken, try Parser.symbolRegex.wholeMatch(in: token) != nil {
-                    args.append(token)
+                    args.append(Parser.formatSubscript(token))
                 } else {
                     throw ParserError.invalidSyntax
                 }
@@ -73,7 +75,7 @@ class Parser {
                 while let token = currentToken, token == "," {
                     advance()
                     if let token = currentToken, try Parser.symbolRegex.wholeMatch(in: token) != nil {
-                        args.append(token)
+                        args.append(Parser.formatSubscript(token))
                         advance()
                     } else {
                         throw ParserError.invalidSyntax
@@ -109,11 +111,11 @@ class Parser {
             throw ParserError.invalidSyntax
         }
     }
-
+    
     static let termSymbols = ["+", "-"]
     private func parseTerm() throws -> Expression {
         var term = try parseFactor()
-
+        
         while let token = currentToken, Parser.termSymbols.contains(token) {
             advance()
             let rhs = try parseFactor()
@@ -124,14 +126,14 @@ class Parser {
             default: ()
             }
         }
-
+        
         return term
     }
-
+    
     static let factorSymbols = ["*", "/", "%", "//"]
     private func parseFactor() throws -> Expression {
         var factor = try parsePostfix()
-
+        
         while let token = currentToken, Parser.factorSymbols.contains(token) {
             advance()
             guard let rhs = try? parsePostfix() else {
@@ -146,7 +148,7 @@ class Parser {
             default: ()
             }
         }
-
+        
         return factor
     }
     
@@ -154,7 +156,7 @@ class Parser {
     static let postfixSymbols = ["!"]
     private func parsePostfix() throws -> Expression {
         var postfix = try parsePrefix()
-
+        
         while let token = currentToken, Parser.postfixSymbols.contains(token) {
             advance()
             
@@ -163,7 +165,7 @@ class Parser {
             default: ()
             }
         }
-
+        
         return postfix
     }
     
@@ -179,7 +181,7 @@ class Parser {
             default: ()
             }
         }
-
+        
         return try parseExponent()
     }
     
@@ -188,10 +190,10 @@ class Parser {
     private func parseExponent() throws -> Expression {
         return try parseExponentRecursively()
     }
-
+    
     private func parseExponentRecursively() throws -> Expression {
         var exponent = try parseLiteral()
-
+        
         if let token = currentToken, Parser.exponentSymbols.contains(token) {
             advance()
             let rhs = try parseExponentRecursively()
@@ -202,7 +204,7 @@ class Parser {
             default: ()
             }
         }
-
+        
         return exponent
     }
     
@@ -272,9 +274,10 @@ class Parser {
                 default: ()
                 }
             } else if try Parser.symbolRegex.wholeMatch(in: token) != nil {
+                let name = Parser.formatSubscript(token)
                 advance()
                 guard currentToken == "(" else {
-                    return Variable(name: token)
+                    return Variable(name: name)
                 }
                 advance()
                 var exprs: [Expression] = [try parseTerm()]
@@ -289,22 +292,34 @@ class Parser {
                 }
                 advance()
                 
-                return Function(name: token, args: exprs)
+                return Function(name: name, args: exprs)
             }
         }
-
+        
         throw ParserError.invalidSyntax
     }
-
+    
     private var currentToken: String? {
         return index < tokens.count ? tokens[index] : nil
     }
-
+    
     private func advance() {
         index += 1
     }
     
     private func reset() {
         index = 0
+    }
+    
+    static let subscriptRegex = /([a-zA-Z]+)_?(\d+)/
+    static func formatSubscript(_ s: String) -> String {
+        if let match = try? subscriptRegex.wholeMatch(in: s) {
+            let name = match.output.1
+            let num = match.output.2
+            
+            return "\(name)_{\(num)}"
+        } else {
+            return s
+        }
     }
 }

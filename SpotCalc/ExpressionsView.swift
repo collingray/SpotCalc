@@ -51,8 +51,7 @@ struct ExpressionView: View {
                         Group {
                             if let definitionLatex: String = expression.definitionLatex {
                                 
-                                LaTeXImage(text: definitionLatex, maxWidth: 120)
-//                                    .foregroundStyle(.secondary)
+                                LaTeXImage(text: definitionLatex, maxWidth: 120, secondary: true)
                                     .foregroundStyle(.red)
                             }
                         }
@@ -60,7 +59,7 @@ struct ExpressionView: View {
                         
                         HStack {
                             if let bodyLatex = expression.bodyLatex {
-                                LaTeXImage(text: bodyLatex, maxWidth: 312)
+                                LaTeXImage(text: bodyLatex, maxWidth: 312, secondary: false)
                                     .foregroundStyle(.primary)
                             } else {
                                 Text(expression.expressionString)
@@ -81,7 +80,7 @@ struct ExpressionView: View {
                         
                         Group {
                             if let value = expression.eval([:], functions: [:])?.description {
-                                LaTeXImage(text: "= \(value)", maxWidth: 120)
+                                LaTeXImage(text: "= \(value)", maxWidth: 120, secondary: true)
                                     .foregroundStyle(.gray)
                             } else {
                                 Spacer()
@@ -173,7 +172,7 @@ struct LaTeXImage: View {
     
     let text: String
     let maxWidth: Int
-    let secondary: Bool = false
+    let secondary: Bool
     var color: Color {
         switch colorScheme {
         case .light:

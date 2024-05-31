@@ -96,14 +96,6 @@ class DisplayExpression: ParsedExpression {
     ]
     static var available_colors: [Color] = possible_colors
     
-//    init(_ expression: String) throws {
-//        self.expression = try ParsedExpression(expression)
-//    }
-    
-//    func updateExpression(_ newExpression: String) {
-//        expression.updateExpression(newExpression)
-//    }
-    
     func enableGraph() {
         if let color = DisplayExpression.available_colors.popLast() {
             graphColor = color
@@ -134,7 +126,7 @@ class ParsedExpression: Identifiable {
             if let ast = ast as? Definition {
                 return ast.name
             } else {
-                return (isFunc ? "f" : "x") + id.description
+                return "\(isFunc ? "f" : "x")_{\(id.description)}"
             }
         }
     }
@@ -149,7 +141,7 @@ class ParsedExpression: Identifiable {
     
     static var total_count = 0
     
-    init(_ expression: String) throws {
+    init(_ expression: String, globalVariables: [String : Expression] = [:]) throws {
         id = ParsedExpression.total_count
         ParsedExpression.total_count += 1
         
@@ -157,7 +149,7 @@ class ParsedExpression: Identifiable {
         let parser = Parser(expression: expression)
         ast = try? parser.parse()
         
-        if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
+        if let (params, f) = ast?.makeFunction(globalVariables), params.count > 0 {
             parameters = params
             function = f
         } else {
@@ -170,13 +162,13 @@ class ParsedExpression: Identifiable {
         }
     }
     
-    func updateExpression(_ newExpression: String) {
+    func updateExpression(_ newExpression: String, globalVariables: [String : Expression] = [:]) {
         if newExpression != expressionString {
             expressionString = newExpression
             let parser = Parser(expression: expressionString)
             ast = try? parser.parse()
             
-            if let (params, f) = ast?.makeFunction([:]), params.count > 0 {
+            if let (params, f) = ast?.makeFunction(globalVariables), params.count > 0 {
                 parameters = params
                 function = f
             } else {
