@@ -318,6 +318,8 @@ class Parser {
             let num = match.output.2
             
             return "\(name)_{\(num)}"
+        } else if s.filter({ $0 == "_" }).count > 1 {
+            return s.replacingOccurrences(of: "_", with: "\\_")
         } else {
             return s
         }

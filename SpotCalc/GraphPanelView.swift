@@ -26,13 +26,16 @@ struct GraphPanelView: View {
         }.map { expr in
             let varName: String = expr.parameters!.first!
             
-            let f: ([Float]) -> Result<[Float], ExpressionError> = { data in
-                let l = Vector(data: data.map({ d in
+            let f: ([Float]) -> Result<[Float], ExpressionError> = { x in
+                let l = Vector(data: x.map({ d in
                     Literal(val: BigDecimal(Double(d)))
                 }))
                 
                 if let ast = expr.ast {
-                    return ast.batch_eval([varName : l], [:])
+                    var vars = data.variables
+                    vars.updateValue(l, forKey: varName)
+                    
+                    return ast.batch_eval(vars, data.functions)
                 } else {
                     return .failure(.genericError(msg: "Expression failed to parse, cannot graph"))
                 }

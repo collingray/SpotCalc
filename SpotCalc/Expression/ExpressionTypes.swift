@@ -217,15 +217,20 @@ struct Function: Expression {
     }
     
     func getVariables() -> [String] {
-        []
+        args.flatMap { expr in
+            expr.getVariables()
+        }
     }
     
     func getFunctions() -> [String] {
-        [name]
+        args.flatMap { expr in
+            expr.getFunctions()
+        } + [name]
     }
     
     func renderLatex() -> String {
-        "\\operatorname{\(name)}{(\(args.map({$0.renderLatex()}).joined(separator: ", ")))}"
+        let n = name.count == 1 ? name : "\\operatorname{\(name)}"
+        return "\(n){(\(args.map({$0.renderLatex()}).joined(separator: ", ")))}"
     }
     
     func printTree() -> String {

@@ -8,15 +8,29 @@
 import Foundation
 import SwiftUI
 import BigDecimal
+import Combine
 
 @Observable 
 class ExpressionData {
-    var expressions: [DisplayExpression]
+    private(set) var expressions: [DisplayExpression]
     
-    init(_ expressions: [DisplayExpression] = []) {
-        self.expressions = expressions
+    var variables: [String : Expression] = [:]
+    var functions: [String : ([Expression]) -> Expression?] = [:]
+    var values: [Int : BigDecimal] = [:]
+    var overwritten: Set<Int> = Set()
+    
+    var externalVariables: [String : Expression]
+    var externalFunctions: [String : ([Expression]) -> Expression?]
+    
+    init(_ exprs: [DisplayExpression] = [], _ externalVariables: [String : Expression] = [:], _ externalFunctions: [String : ([Expression]) -> Expression?] = [:]) {
+        self.expressions = exprs
+        
+        self.externalVariables = externalVariables
+        self.externalFunctions = externalFunctions
+
+        updateData()
     }
-    
+        
     var graphVisible: Bool {
         expressions.contains { expression in
             expression.isGraphed
@@ -27,28 +41,72 @@ class ExpressionData {
         expressions.count
     }
     
-    var variables: [String : BigDecimal] {
-        let vars = self.expressions.compactMap { expression in
-            if let val = expression.eval([:], functions: [:]), let name = expression.name {
-                return (name, val)
-            } else {
-                return nil
+    func updateData() {
+        var vars: [String : Expression] = externalVariables
+        var funcs: [String : ([Expression]) -> Expression?] = externalFunctions
+        
+        values = [:]
+        overwritten = Set()
+        
+        for expr in expressions {
+            if let ast = expr.ast {
+                if let value = expr.eval(vars, funcs) {
+                    values.updateValue(value, forKey: expr.id)
+                }
+                
+                if let name = expr.name {
+                    if let function = expr.function, expr.isFunc {
+                        if funcs.updateValue(function, forKey: name) != nil {
+                            if let id = expressions.first(where: { expr in
+                                expr.name == name && !overwritten.contains(expr.id)
+                            })?.id {
+                                overwritten.insert(id)
+                            }
+                        }
+                    } else {
+                        if vars.updateValue(ast, forKey: name) != nil {
+                            if let id = expressions.first(where: { expr in
+                                expr.name == name && !overwritten.contains(expr.id)
+                            })?.id {
+                                overwritten.insert(id)
+                            }
+                        }
+                    }
+                }
             }
         }
         
-        return Dictionary(uniqueKeysWithValues: vars)
+        variables = vars
+        functions = funcs
+        
+        
+        
+        print(variables)
+        print(functions)
+        print(overwritten)
     }
     
-    var functions: [String : ([Expression]) -> Expression?] {
-        let funcs = self.expressions.compactMap { expression in
-            if let f = expression.function, let name = expression.name {
-                return (name, f)
-            } else {
-                return nil
-            }
+    func addExpression(_ expression: String) throws {
+        let expr = try DisplayExpression(expression, variables: variables)
+        expressions.append(expr)
+        
+        updateData()
+    }
+    
+    func updateExpression(id: Int, _ newExpression: String) {
+        if let expr = expressions.first(where: {$0.id == id}) {
+            expr.updateExpression(newExpression, variables: variables)
         }
         
-        return Dictionary(uniqueKeysWithValues: funcs)
+        updateData()
+    }
+    
+    func removeExpression(id: Int) {
+        if let i = expressions.firstIndex(where: {$0.id == id}) {
+            expressions.remove(at: i)
+        }
+        
+        updateData()
     }
 }
 
@@ -141,7 +199,7 @@ class ParsedExpression: Identifiable {
     
     static var total_count = 0
     
-    init(_ expression: String, globalVariables: [String : Expression] = [:]) throws {
+    init(_ expression: String, variables: [String : Expression] = [:]) throws {
         id = ParsedExpression.total_count
         ParsedExpression.total_count += 1
         
@@ -149,7 +207,7 @@ class ParsedExpression: Identifiable {
         let parser = Parser(expression: expression)
         ast = try? parser.parse()
         
-        if let (params, f) = ast?.makeFunction(globalVariables), params.count > 0 {
+        if let (params, f) = ast?.makeFunction(variables), params.count > 0 {
             parameters = params
             function = f
         } else {
@@ -162,13 +220,13 @@ class ParsedExpression: Identifiable {
         }
     }
     
-    func updateExpression(_ newExpression: String, globalVariables: [String : Expression] = [:]) {
+    func updateExpression(_ newExpression: String, variables: [String : Expression] = [:]) {
         if newExpression != expressionString {
             expressionString = newExpression
             let parser = Parser(expression: expressionString)
             ast = try? parser.parse()
             
-            if let (params, f) = ast?.makeFunction(globalVariables), params.count > 0 {
+            if let (params, f) = ast?.makeFunction(variables), params.count > 0 {
                 parameters = params
                 function = f
             } else {
@@ -182,7 +240,7 @@ class ParsedExpression: Identifiable {
         }
     }
     
-    func eval(_ variables: [String: Expression], functions: [String : ([Expression]) -> Expression?]) -> BigDecimal? {
+    func eval(_ variables: [String: Expression], _ functions: [String : ([Expression]) -> Expression?]) -> BigDecimal? {
         return ast?.eval(variables, functions)
     }
 }

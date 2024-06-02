@@ -1,13 +1,14 @@
 import SwiftUI
 import LaTeXSwiftUI
 import AppKit
+import BigDecimal
 
 struct ExpressionsView: View {
     @Environment(ExpressionData.self) var data: ExpressionData
     
     var body: some View {
         ForEach(Array(data.expressions.enumerated()), id: \.element.id) { i, expr in
-            ExpressionView(expression: expr, deleteExpression: {data.expressions.remove(at: i)})
+            ExpressionView(expression: expr)
                 .padding([.top], 10)
                 .overlay(Rectangle().frame(width: nil, height: i == 0 ? 0 : 1, alignment: .top).foregroundColor(Color.gray).opacity(0.5), alignment: .top)
                 .fixedSize(horizontal: false, vertical: true)
@@ -16,10 +17,10 @@ struct ExpressionsView: View {
 }
 
 struct ExpressionView: View {
+    @Environment(ExpressionData.self) var data: ExpressionData
+    
     @Bindable var expression: DisplayExpression
-    
-    let deleteExpression: () -> ()
-    
+        
     @State var hovered: Bool = false
     @State var editing: Bool = false
     @State var editingText: String = ""
@@ -41,7 +42,7 @@ struct ExpressionView: View {
                     .multilineTextAlignment(.center)
                     .onSubmit {
                         if editingText != "" {
-                            expression.updateExpression(editingText)
+                            data.updateExpression(id: expression.id, editingText)
                         }
                         editing = false
                     }
@@ -50,8 +51,9 @@ struct ExpressionView: View {
                     HStack {
                         Group {
                             if let definitionLatex: String = expression.definitionLatex {
+                                let text = data.overwritten.contains(expression.id) ? "\\cancel{\(definitionLatex)}" : definitionLatex
                                 
-                                LaTeXImage(text: definitionLatex, maxWidth: 120, secondary: true)
+                                LaTeXImage(text: text, maxWidth: 120, secondary: true)
                                     .foregroundStyle(.red)
                             }
                         }
@@ -79,7 +81,7 @@ struct ExpressionView: View {
                         
                         
                         Group {
-                            if let value = expression.eval([:], functions: [:])?.description {
+                            if let value = data.values[expression.id] {
                                 LaTeXImage(text: "= \(value)", maxWidth: 120, secondary: true)
                                     .foregroundStyle(.gray)
                             } else {
@@ -148,7 +150,7 @@ struct ExpressionView: View {
                         .help("Graph expression")
                     
                     Button(action: {
-                        deleteExpression()
+                        data.removeExpression(id: expression.id)
                     }) {
                         Image(systemName: "trash.circle.fill")
                             .resizable()
