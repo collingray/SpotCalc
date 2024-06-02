@@ -70,6 +70,8 @@
 		F003E2EF2C040F87004E528C /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		F003E2F12C040FA4004E528C /* ShortcutsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsSettingsView.swift; sourceTree = "<group>"; };
 		F003E2F32C050515004E528C /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
+		F003E2F62C0BF02F004E528C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F003E2F72C0BFAE1004E528C /* example_screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = example_screenshot.png; sourceTree = "<group>"; };
 		F0F1F4C32BF93E9F0016C79B /* SpotCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcApp.swift; sourceTree = "<group>"; };
 		F0F1F4C82BF93E9F0016C79B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -152,6 +154,8 @@
 		F0F1F4BA2BF93E9F0016C79B = {
 			isa = PBXGroup;
 			children = (
+				F003E2F62C0BF02F004E528C /* README.md */,
+				F003E2F72C0BFAE1004E528C /* example_screenshot.png */,
 				F0F1F4C52BF93E9F0016C79B /* SpotCalc */,
 				F0F1F4D72BF93EA00016C79B /* SpotCalcTests */,
 				F0F1F4E12BF93EA00016C79B /* SpotCalcUITests */,
