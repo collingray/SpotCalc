@@ -83,6 +83,7 @@ class ExpressionData {
         
         print(variables)
         print(functions)
+        print(values)
         print(overwritten)
     }
     
@@ -120,7 +121,9 @@ class DisplayExpression: ParsedExpression {
     
     var definitionLatex: String? {
         if let name = name {
-            if let params = parameters {
+            if let ast = ast as? Definition {
+                return "\(ast.renderLatexDefinition()) ="
+            } else if let params = parameters {
                 return "\(name)(\(params.joined(separator: ","))) ="
             } else {
                 return "\(name) ="

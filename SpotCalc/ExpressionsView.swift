@@ -82,7 +82,7 @@ struct ExpressionView: View {
                         
                         Group {
                             if let value = data.values[expression.id] {
-                                LaTeXImage(text: "= \(value)", maxWidth: 120, secondary: true)
+                                LaTeXImage(text: "= \(renderValueLatex(num: value))", maxWidth: 120, secondary: true)
                                     .foregroundStyle(.gray)
                             } else {
                                 Spacer()
@@ -204,5 +204,31 @@ struct LaTeXImage: View {
                     .aspectRatio(contentMode: .fit)
             }
         }
+    }
+}
+
+func renderValueLatex(num: BigDecimal) -> String {
+    if num.isInfinite {
+        let sign = num.sign.rawValue != 0 ? "-" : ""
+        return "\(sign)\\infty"
+    }
+    
+    let exp = num.significandDigitCount + num.exponent - 1
+    
+    if exp >= 9 || exp < -3 {
+        let signOffset = num.isNegative ? 1 : 0
+        var digits = num.trim.digits.asString()
+        
+        if digits.count > 1 {
+            if digits.count >= 9 {
+                digits = String(digits[..<digits.index(digits.startIndex, offsetBy: 9)])
+            }
+            
+            digits.insert(".", at: digits.index(digits.startIndex, offsetBy: 1+signOffset))
+        }
+        
+        return "\(digits)\\times 10^{\(exp)}"
+    } else {
+        return num.asString()
     }
 }

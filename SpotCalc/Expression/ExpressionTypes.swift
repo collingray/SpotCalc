@@ -152,6 +152,10 @@ struct Literal: Expression {
     }
     
     func renderLatex() -> String {
+        if val.isInfinite {
+            return "\\infty"
+        }
+        
         return val.asString()
     }
     
@@ -184,7 +188,7 @@ struct Variable: Expression {
     }
     
     func renderLatex() -> String {
-        return name
+        return renderSymbolLatex(name)
     }
     
     func printTree() -> String {
@@ -229,8 +233,7 @@ struct Function: Expression {
     }
     
     func renderLatex() -> String {
-        let n = name.count == 1 ? name : "\\operatorname{\(name)}"
-        return "\(n){(\(args.map({$0.renderLatex()}).joined(separator: ", ")))}"
+        "\(renderSymbolLatex(name, isFunc: true)){(\(args.map({$0.renderLatex()}).joined(separator: ", ")))}"
     }
     
     func printTree() -> String {
@@ -342,7 +345,7 @@ struct FunctionDefinition: Definition {
     }
     
     func renderLatexDefinition() -> String {
-        "\\operatorname{\(name)}{(\(args.joined(separator: ", ")))}"
+        "\(renderSymbolLatex(name, isFunc: true)){(\(args.map({renderSymbolLatex($0)}).joined(separator: ", ")))}"
     }
     
     func printTree() -> String {
@@ -383,7 +386,7 @@ struct VariableDefinition: Definition {
     }
     
     func renderLatexDefinition() -> String {
-        name
+        renderSymbolLatex(name)
     }
     
     func printTree() -> String {
@@ -412,7 +415,7 @@ struct Add: BinaryExpression {
         
         if let v1 = try? v1.get(), let v2 = try? v2.get() {
             let prod = v1.count * v2.count
-                        
+            
             do {
                 let v1 = try v1.repeatTo(prod)
                 let v2 = try v2.repeatTo(prod)
@@ -1373,5 +1376,15 @@ extension vForce {
     
     static func factorial<U>(_ vector: U) -> [Float] where U : AccelerateBuffer, U.Element == Float {
         return vForce.gamma(vDSP.add(1, vector))
+    }
+}
+
+func renderSymbolLatex(_ name: String, isFunc: Bool = false) -> String {
+    let format = isFunc ? "operatorname" : "mathit"
+    
+    if (try? /[a-zA-Z](_{\d+})?/.wholeMatch(in: name)) != nil {
+        return "\(name)"
+    } else {
+        return "\\\(format){\(name)}"
     }
 }
