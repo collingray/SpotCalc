@@ -97,6 +97,10 @@ class ExpressionData {
     func updateExpression(id: Int, _ newExpression: String) {
         if let expr = expressions.first(where: {$0.id == id}) {
             expr.updateExpression(newExpression, variables: variables)
+            
+            if !expr.isGraphable {
+                expr.disableGraph()
+            }
         }
         
         updateData()
@@ -117,6 +121,14 @@ class DisplayExpression: ParsedExpression {
     
     var isGraphed: Bool {
         graphColor != nil
+    }
+    
+    var isGraphable: Bool {
+        if let params = parameters {
+            return params.count == 1
+        } else {
+            return false
+        }
     }
     
     var definitionLatex: String? {
@@ -157,9 +169,19 @@ class DisplayExpression: ParsedExpression {
     ]
     static var available_colors: [Color] = possible_colors
     
+    func toggleGraph() {
+        if isGraphed {
+            disableGraph()
+        } else {
+            enableGraph()
+        }
+    }
+    
     func enableGraph() {
-        if let color = DisplayExpression.available_colors.popLast() {
-            graphColor = color
+        if isGraphable {
+            if let color = DisplayExpression.available_colors.popLast() {
+                graphColor = color
+            }
         }
     }
     

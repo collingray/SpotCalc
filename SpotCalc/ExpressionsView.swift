@@ -129,11 +129,7 @@ struct ExpressionView: View {
                         .help("Copy to clipboard")
                     
                     Button(action: {
-                        if expression.isGraphed {
-                            expression.disableGraph()
-                        } else {
-                            expression.enableGraph()
-                        }
+                        expression.toggleGraph()
                     }) {
                         if let graphColor = expression.graphColor { // color is only present when graphed
                             Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
@@ -146,7 +142,7 @@ struct ExpressionView: View {
                                 .frame(width: 25, height: 25)
                         }
                     }.buttonStyle(BorderlessButtonStyle())
-                        .disabled(expression.isError)
+                        .disabled(expression.isError || !expression.isGraphable)
                         .help("Graph expression")
                     
                     Button(action: {

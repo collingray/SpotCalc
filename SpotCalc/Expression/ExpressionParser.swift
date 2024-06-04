@@ -18,7 +18,7 @@ class Parser {
         
         let pattern = """
         (?x)
-        (\\d+(\\.\\d+)?(e(-|\\+)?\\d+)?) | # Numbers (including decimals and exponential notation)
+        ((\\d+\\.?|\\d*\\.\\d+)(e(-|\\+)?\\d+)?) | # Numbers (including decimals and exponential notation)
         (\\*\\*) |               # Alternate power
         (//) |                   # Floor divide
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)
@@ -226,7 +226,29 @@ class Parser {
         return try parseAtom()
     }
     
-    static let functionSymbols = ["abs", "log", "ln", "exp", "sqrt", "cbrt", "sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh", "ceil", "floor", "round"]
+//    static let functionSymbols = [
+//        "abs": 1, 
+//        "log": 1,
+//        "ln": 1,
+//        "exp": 1,
+//        "sqrt": 1,
+//        "cbrt": 1,
+//        "sin": 1,
+//        "cos": 1,
+//        "tan": 1,
+//        "arcsin": 1,
+//        "arccos": 1,
+//        "arctan": 1,
+//        "sinh": 1,
+//        "cosh": 1,
+//        "tanh": 1,
+//        "arcsinh": 1,
+//        "arccosh": 1,
+//        "arctanh": 1,
+//        "ceil": 1,
+//        "floor": 1,
+//        "round"
+//    ]
     private func parseAtom() throws -> Expression {
         if let token = currentToken {
             if token == "(" {
@@ -237,40 +259,50 @@ class Parser {
                 }
                 advance()
                 return Grouping(x: expr)
-            } else if Parser.functionSymbols.contains(token) {
+            } else if let nArgs = ExpressionTypes.namedFunctionArgs[token] {
                 advance()
-                guard currentToken == "(" else {
-                    throw ParserError.invalidSyntax
-                }
+                guard currentToken == "(" else { throw ParserError.invalidSyntax }
                 advance()
-                let expr = try parseTerm()
-                guard currentToken == ")" else {
-                    throw ParserError.invalidSyntax
+                
+                var args: [Expression] = [try parseTerm()]
+                
+                for _ in 1..<nArgs {
+                    guard currentToken == "," else {
+                        print("wrong number of args")
+                        throw ParserError.invalidSyntax
+                    }
+                    advance()
+                    args.append(try parseTerm())
                 }
+                
+                guard currentToken == ")" else { throw ParserError.invalidSyntax }
                 advance()
                 
                 switch token {
-                case "abs": return AbsoluteValue(x: expr)
-                case "log": return LogarithmBase10(x: expr)
-                case "ln": return NaturalLogarithm(x: expr)
-                case "exp": return Exponential(x: expr)
-                case "sqrt": return SquareRoot(x: expr)
-                case "cbrt": return CubeRoot(x: expr)
-                case "sin": return Sine(x: expr)
-                case "cos": return Cosine(x: expr)
-                case "tan": return Tangent(x: expr)
-                case "arcsin": return ArcSine(x: expr)
-                case "arccos": return ArcCosine(x: expr)
-                case "arctan": return ArcTangent(x: expr)
-                case "sinh": return Sinh(x: expr)
-                case "cosh": return Cosh(x: expr)
-                case "tanh": return Tanh(x: expr)
-                case "arcsinh": return ArcSinh(x: expr)
-                case "arccosh": return ArcCosh(x: expr)
-                case "arctanh": return ArcTanh(x: expr)
-                case "ceil": return Ceiling(x: expr)
-                case "floor": return Floor(x: expr)
-                case "round": return Round(x: expr)
+                case "abs": return AbsoluteValue(x: args[0])
+                case "log": return LogarithmBase10(x: args[0])
+                case "ln": return NaturalLogarithm(x: args[0])
+                case "exp": return Exponential(x: args[0])
+                case "sqrt": return SquareRoot(x: args[0])
+                case "cbrt": return CubeRoot(x: args[0])
+                case "sin": return Sine(x: args[0])
+                case "cos": return Cosine(x: args[0])
+                case "tan": return Tangent(x: args[0])
+                case "arcsin": return ArcSine(x: args[0])
+                case "arccos": return ArcCosine(x: args[0])
+                case "arctan": return ArcTangent(x: args[0])
+                case "sinh": return Sinh(x: args[0])
+                case "cosh": return Cosh(x: args[0])
+                case "tanh": return Tanh(x: args[0])
+                case "arcsinh": return ArcSinh(x: args[0])
+                case "arccosh": return ArcCosh(x: args[0])
+                case "arctanh": return ArcTanh(x: args[0])
+                case "ceil": return Ceiling(x: args[0])
+                case "floor": return Floor(x: args[0])
+                case "round": return Round(x: args[0])
+                case "min": return Min(x: args[0], y: args[1])
+                case "max": return Max(x: args[0], y: args[1])
+                case "sum": return Summation(from: args[0], to: args[1], value: args[2])
                 default: ()
                 }
             } else if try Parser.symbolRegex.wholeMatch(in: token) != nil {
