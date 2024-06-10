@@ -1,5 +1,5 @@
 # SpotCalc
-### A Desmos-like graphing calculator 
+### A Desmos-like graphing calculator for macOS
 
 *Still a WIP*
 
