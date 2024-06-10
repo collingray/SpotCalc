@@ -88,29 +88,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
     
-//    func windowDidMove(_ notification: Notification) {
-//        guard let window = notification.object as? NSWindow else { return }
-//
-//        let snapThreshold: CGFloat = 20
-//        let targetPosition = NSPoint(x: 100, y: 100)  // Example target position
-//
-//        let windowFrame = window.frame
-//        let deltaX = abs(windowFrame.origin.x - targetPosition.x)
-//        let deltaY = abs(windowFrame.origin.y - targetPosition.y)
-//        
-//        print(windowFrame)
-//        
-//        if deltaX < snapThreshold && deltaY < snapThreshold {
-//            window.setFrameOrigin(targetPosition)
-//        }
-//    }
+    func showWindow() {
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate()
+    }
+    
+    func hideWindow() {
+        window.orderOut(nil)
+    }
+    
+    func centerWindow() {
+        if let window = NSApplication.shared.windows.first {
+            window.setContentSize(.init(width: 600, height: 400))
+            window.center()
+        }
+    }
 
     func toggleWindow() {
         if window.isVisible {
-            window.orderOut(nil)
+            hideWindow()
         } else {
-            window.makeKeyAndOrderFront(nil)
-            NSApp.activate()
+            showWindow()
         }
     }
 }

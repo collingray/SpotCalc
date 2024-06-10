@@ -18,7 +18,7 @@ class Parser {
         
         let pattern = """
         (?x)
-        ((\\d+\\.?|\\d*\\.\\d+)(e(-|\\+)?\\d+)?) | # Numbers (including decimals and exponential notation)
+        ((\\d*\\.\\d+|\\d+\\.?)(e(-|\\+)?\\d+)?) | # Numbers (including decimals and exponential notation)
         (\\*\\*) |               # Alternate power
         (//) |                   # Floor divide
         ([\\+\\-\\*/\\^=]) |     # Basic operators (+, -, *, /, ^, =)
@@ -303,6 +303,7 @@ class Parser {
                 case "min": return Min(x: args[0], y: args[1])
                 case "max": return Max(x: args[0], y: args[1])
                 case "sum": return Summation(from: args[0], to: args[1], value: args[2])
+                case "prod": return Product(from: args[0], to: args[1], value: args[2])
                 default: ()
                 }
             } else if try Parser.symbolRegex.wholeMatch(in: token) != nil {

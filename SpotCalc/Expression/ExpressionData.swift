@@ -78,13 +78,6 @@ class ExpressionData {
         
         variables = vars
         functions = funcs
-        
-        
-        
-        print(variables)
-        print(functions)
-        print(values)
-        print(overwritten)
     }
     
     func addExpression(_ expression: String) throws {

@@ -80,6 +80,8 @@ protocol BinaryExpression: Expression {
     var y: Expression { get set }
     
     static var symbol: String { get }
+    
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float]
 }
 
 extension BinaryExpression {
@@ -91,6 +93,28 @@ extension BinaryExpression {
         }
         
         return copy
+    }
+    
+    func batch_eval(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
+        let v1 = x.batch_eval(variables, functions)
+        let v2 = y.batch_eval(variables, functions)
+        
+        if let v1 = try? v1.get(), let v2 = try? v2.get() {
+            let size = max(v1.count, v2.count)
+            
+            do {
+                let v1 = try v1.repeatTo(size)
+                let v2 = try v2.repeatTo(size)
+                
+                return .success(Self._batch_eval(v1: v1, v2: v2))
+            } catch let error as ExpressionError {
+                return .failure(error)
+            } catch {
+                return .failure(.genericError(msg: error.localizedDescription))
+            }
+        } else {
+            return [v1, v2].flattenResults()
+        }
     }
     
     func getVariables() -> [String] {
@@ -217,7 +241,7 @@ struct Variable: Expression {
     let name: String
     
     func apply(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
-        return variables[name]
+        return variables[name] ?? self
     }
     
     func eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> BigDecimal? {
@@ -250,7 +274,7 @@ struct Function: Expression {
     let args: [Expression]
     
     func apply(_ variables: [String : Expression], _ functions: [String : ([Expression]) -> Expression?]) -> Expression? {
-        functions[name]?(args)
+        functions[name]?(args)?.apply(variables, functions) ?? self
     }
     
     func eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> BigDecimal? {
@@ -458,26 +482,8 @@ struct Add: BinaryExpression {
         return v1 + v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-            
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-
-                return .success(vDSP.add(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.add(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -497,26 +503,8 @@ struct Subtract: BinaryExpression {
         return v1 - v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-                        
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vDSP.subtract(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.subtract(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -536,26 +524,8 @@ struct Multiply: BinaryExpression {
         return v1 * v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-                        
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vDSP.multiply(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.multiply(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -575,26 +545,8 @@ struct Divide: BinaryExpression {
         return v1.divide(v2, .decimal32)
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-                        
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vDSP.divide(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.divide(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -614,26 +566,8 @@ struct FloorDivide: BinaryExpression {
         return v1 / v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-                        
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vDSP.trunc(vDSP.divide(v1, v2)))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.trunc(vDSP.divide(v1, v2))
     }
     
     func renderLatex() -> String {
@@ -653,26 +587,8 @@ struct Modulus: BinaryExpression {
         return v1 % v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-            
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vForce.remainder(dividends: v1, divisors: v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vForce.remainder(dividends: v1, divisors: v2)
     }
     
     func renderLatex() -> String {
@@ -692,26 +608,8 @@ struct Exponent: BinaryExpression {
         return .pow(v1, v2)
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-            
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vForce.pow(bases: v1, exponents: v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vForce.pow(bases: v1, exponents: v2)
     }
     
     func renderLatex() -> String {
@@ -1138,8 +1036,8 @@ struct BitwiseAnd: BinaryExpression {
         }
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        return .failure(.genericError(msg: "Bitwise AND is an invalid operation for floats"))
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return []
     }
     
     func renderLatex() -> String {
@@ -1164,8 +1062,8 @@ struct BitwiseOr: BinaryExpression {
         }
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        return .failure(.genericError(msg: "Bitwise OR is an invalid operation for floats"))
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return []
     }
     
     func renderLatex() -> String {
@@ -1190,8 +1088,8 @@ struct BitwiseXor: BinaryExpression {
         }
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        return .failure(.genericError(msg: "Bitwise XOR is an invalid operation for floats"))
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return []
     }
     
     func renderLatex() -> String {
@@ -1288,31 +1186,12 @@ struct Min: BinaryExpression {
         return BigDecimal.minimum(v1, v2)
     }
     
-    func batch_eval(_ variables: [String : any Expression], _ functions: [String : ([any Expression]) -> (any Expression)?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-            
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                
-                return .success(vDSP.minimum(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.minimum(v1, v2)
     }
     
     func renderLatex() -> String {
-        "\\operatorname{min}{(\(x.renderLatex()), \(y.renderLatex())}"
+        "\\operatorname{min}{(\(x.renderLatex()), \(y.renderLatex()))}"
     }
 }
 
@@ -1329,30 +1208,12 @@ struct Max: BinaryExpression {
         return BigDecimal.maximum(v1, v2)
     }
     
-    func batch_eval(_ variables: [String : any Expression], _ functions: [String : ([any Expression]) -> (any Expression)?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-            
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-                
-                return .success(vDSP.maximum(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.maximum(v1, v2)
     }
     
     func renderLatex() -> String {
-        "\\operatorname{min}{(\(x.renderLatex()), \(y.renderLatex())}"
+        "\\operatorname{max}{(\(x.renderLatex()), \(y.renderLatex()))}"
     }
 }
 
@@ -1410,10 +1271,87 @@ struct Summation: NAryExpression {
         return .failure(.genericError(msg: "unimplemented"))
     }
     
+    func getVariables() -> [String] {
+        let vars = args.flatMap { expr in
+            expr.getVariables()
+        }
+        
+        return vars.filter({$0 != "i"})
+    }
+    
     func renderLatex() -> String {
         let fromStr = from is Definition ? from.renderLatex() : "i=" + from.renderLatex()
         
         return "\\sum_{\(fromStr)}^{\(to.renderLatex())}{\(value.renderLatex())}"
+    }
+}
+
+struct Product: NAryExpression {
+    var args: [Expression]
+    
+    init(from: Expression, to: Expression, value: Expression) {
+        self.args = [from, to, value]
+    }
+    
+    static let n: Int = 3
+    static let symbol = "prod"
+    
+    var from: Expression {
+        self.args[0]
+    }
+    
+    var to: Expression {
+        self.args[1]
+    }
+    
+    var value: Expression {
+        self.args[2]
+    }
+    
+    func eval(_ variables: [String : any Expression], _ functions: [String : ([Expression]) -> (Expression)?]) -> BigDecimal? {
+        var varName = "i"
+        if let fromDef = from as? Definition {
+            if fromDef is FunctionDefinition {
+                return nil
+            }
+            
+            varName = fromDef.name
+        }
+        
+        guard let fromVal = from.eval(variables, functions)?.rounded() else { return nil }
+        guard let toVal = to.eval(variables, functions)?.rounded() else { return nil }
+        
+        var acc = BigDecimal.one
+        var i = fromVal
+        while i <= toVal {
+            var vars = variables
+            vars[varName] = Literal(val: i)
+            if let v = value.eval(vars, functions) {
+                acc *= v
+            }
+            
+            i += 1
+        }
+        
+        return acc
+    }
+    
+    func batch_eval(_ variables: [String : any Expression], _ functions: [String : ([Expression]) -> (Expression)?]) -> Result<[Float], ExpressionError> {
+        return .failure(.genericError(msg: "unimplemented"))
+    }
+    
+    func getVariables() -> [String] {
+        let vars = args.flatMap { expr in
+            expr.getVariables()
+        }
+        
+        return vars.filter({$0 != "i"})
+    }
+    
+    func renderLatex() -> String {
+        let fromStr = from is Definition ? from.renderLatex() : "i=" + from.renderLatex()
+        
+        return "\\prod_{\(fromStr)}^{\(to.renderLatex())}{\(value.renderLatex())}"
     }
 }
 
@@ -1490,26 +1428,8 @@ struct Coefficient: BinaryExpression {
         return v1 * v2
     }
     
-    func batch_eval(_ variables: [String: Expression], _ functions: [String: ([Expression]) -> Expression?]) -> Result<[Float], ExpressionError> {
-        let v1 = x.batch_eval(variables, functions)
-        let v2 = y.batch_eval(variables, functions)
-        
-        if let v1 = try? v1.get(), let v2 = try? v2.get() {
-            let prod = v1.count * v2.count
-                        
-            do {
-                let v1 = try v1.repeatTo(prod)
-                let v2 = try v2.repeatTo(prod)
-
-                return .success(vDSP.multiply(v1, v2))
-            } catch let error as ExpressionError {
-                return .failure(error)
-            } catch {
-                return .failure(.genericError(msg: error.localizedDescription))
-            }
-        } else {
-            return [v1, v2].flattenResults()
-        }
+    static func _batch_eval(v1: [Float], v2: [Float]) -> [Float] {
+        return vDSP.multiply(v1, v2)
     }
     
     func renderLatex() -> String {
@@ -1563,6 +1483,7 @@ struct ExpressionTypes {
         Min.self,
         Max.self,
         Summation.self,
+        Product.self,
         Coefficient.self
     ]
     
@@ -1590,7 +1511,8 @@ struct ExpressionTypes {
         AbsoluteValue.self,
         Min.self,
         Max.self,
-        Summation.self
+        Summation.self,
+        Product.self
     ]
     
     static let namedFunctionArgs = Dictionary(

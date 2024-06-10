@@ -22,20 +22,27 @@ struct GraphPanelView: View {
     
     var functions: [(Int, ([Float]) -> Result<[Float], ExpressionError>, Color)] {
         return data.expressions.filter { expr in
-            expr.isGraphed && expr.parameters?.count == 1
+            expr.isGraphed
         }.map { expr in
             let varName: String = expr.parameters!.first!
+            
+            var vars = data.variables
+            vars.removeValue(forKey: varName)
+            
+            print("Applying \(data.functions.keys.joined(separator: ",")) to \(expr.name ?? "???")")
+            let ast = expr.ast?.apply(vars, data.functions)
+            
+            if let tree = ast?.printTree() {
+                print(tree)
+            }
             
             let f: ([Float]) -> Result<[Float], ExpressionError> = { x in
                 let l = Vector(data: x.map({ d in
                     Literal(val: BigDecimal(Double(d)))
                 }))
                 
-                if let ast = expr.ast {
-                    var vars = data.variables
-                    vars.updateValue(l, forKey: varName)
-                    
-                    return ast.batch_eval(vars, data.functions)
+                if let ast = ast {
+                    return ast.batch_eval([varName : l], [:])
                 } else {
                     return .failure(.genericError(msg: "Expression failed to parse, cannot graph"))
                 }
