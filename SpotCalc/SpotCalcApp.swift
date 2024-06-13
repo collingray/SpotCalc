@@ -22,7 +22,7 @@ struct SpotCalcApp: App {
         }
         
         MenuBarExtra("SpotCalc Menu Bar", systemImage: "function") {
-            MenuBarView()
+            MenuBarView(delegate: appDelegate)
         }
     }
 }
@@ -46,14 +46,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.standardWindowButton(.closeButton)?.isHidden = true
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
-            window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
+            window.collectionBehavior = [.fullScreenAuxiliary, .moveToActiveSpace]
             window.styleMask.insert([.resizable, .fullSizeContentView])
             window.invalidateShadow()
             window.makeKeyAndOrderFront(nil)
-            //            window.minSize = NSSize(width: 600, height: 100)  // Minimum size to maintain a fixed width
-            //            window.maxSize = NSSize(width: 600, height: CGFloat.greatestFiniteMagnitude)  // Maximum height to allow vertical resizing
             
             registerHotkey()
+            registerSpaceChangeMonitor()
         }
     }
     
@@ -88,9 +87,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
     }
     
+    func registerSpaceChangeMonitor() {
+        NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: OperationQueue.main) { notification in
+            self.hideWindow()
+        }
+    }
+    
     func showWindow() {
         window.makeKeyAndOrderFront(nil)
-        NSApp.activate()
+        NSApp.activate(ignoringOtherApps: true)
     }
     
     func hideWindow() {

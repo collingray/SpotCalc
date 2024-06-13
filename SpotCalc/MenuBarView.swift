@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct MenuBarView: View {
+    let delegate: AppDelegate
+    
     var body: some View {
         Text("SpotCalc")
         VStack {
             Section {
-                
                 Button("Toggle window") {
-                    
+                    delegate.toggleWindow()
                 }.keyboardShortcut(.space, modifiers: [.control, .option, .command])
+                
                 Button("Center window") {
-                    
+                    delegate.centerWindow()
                 }
                 
                 SettingsLink(label: {
@@ -26,13 +28,9 @@ struct MenuBarView: View {
             }
             Section {
                 Button("Quit SpotCalc") {
-                    
-                }
+                    NSApplication.shared.terminate(nil)
+                }.keyboardShortcut(KeyEquivalent("q"), modifiers: .command)
             }
         }
     }
-}
-
-#Preview {
-    MenuBarView()
 }
