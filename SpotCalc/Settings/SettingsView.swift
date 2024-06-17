@@ -60,7 +60,7 @@ extension Binding {
         )
     }
     
-    func contains<T: Equatable>(_ value: T) -> Binding<Bool> where Value == T?{
+    func contains<T: Equatable & Sendable>(_ value: T) -> Binding<Bool> where Value == T?{
         Binding<Bool>(
             get: { self.wrappedValue == value },
             set: { newValue in

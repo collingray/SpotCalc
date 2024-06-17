@@ -3,11 +3,12 @@ import SwiftUI
 // Adapted from https://stackoverflow.com/questions/66137652/swiftui-two-finger-swipe-scroll-gesture
 
 protocol PanViewDelegateProtocol {
+    @MainActor
     func scrollWheel(with event: NSEvent);
 }
 
 class PanView: NSView {
-    var delegate: PanViewDelegateProtocol!
+    var delegate: (any PanViewDelegateProtocol)!
     
     override var acceptsFirstResponder: Bool { true }
     
@@ -31,7 +32,7 @@ struct RepresentablePanView: NSViewRepresentable, PanViewDelegateProtocol {
     func updateNSView(_ nsView: NSViewType, context: Context) {
     }
   
-    func scrollWheel(with event: NSEvent) {
+    @MainActor func scrollWheel(with event: NSEvent) {
         if let scrollAction = scrollAction {
             scrollAction(event)
         }

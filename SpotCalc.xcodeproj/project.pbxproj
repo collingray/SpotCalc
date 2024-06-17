@@ -27,7 +27,6 @@
 		F0F1F4E52BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4E42BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift */; };
 		F0F1F4F42BF96A8A0016C79B /* LaTeXSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4F32BF96A8A0016C79B /* LaTeXSwiftUI */; };
 		F0F1F4F62BF98F2E0016C79B /* ExpressionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */; };
-		F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */; };
 		F0F1F4FA2BF991410016C79B /* ExpressionTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */; };
 		F0F1F4FD2BF99E1C0016C79B /* ComplexModule in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4FC2BF99E1C0016C79B /* ComplexModule */; };
 		F0F1F4FF2BF99E1C0016C79B /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = F0F1F4FE2BF99E1C0016C79B /* Numerics */; };
@@ -85,7 +84,6 @@
 		F0F1F4E42BF93EA00016C79B /* SpotCalcUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotCalcUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F0F1F4F12BF940BD0016C79B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionsView.swift; sourceTree = "<group>"; };
-		F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollGradient.swift; sourceTree = "<group>"; };
 		F0F1F4F92BF991410016C79B /* ExpressionTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionTypes.swift; sourceTree = "<group>"; };
 		F0F1F5022BF9A4010016C79B /* ExpressionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParser.swift; sourceTree = "<group>"; };
 		F0F1F5042BF9A4BA0016C79B /* ExpressionParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionParserTest.swift; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 				F0F1F4C62BF93E9F0016C79B /* SpotCalcApp.swift */,
 				F0F1F4C82BF93E9F0016C79B /* MainView.swift */,
 				F0F1F50A2BFAF75A0016C79B /* ContentView.swift */,
-				F0F1F4F72BF98FF60016C79B /* ScrollGradient.swift */,
 				F0F1F4F52BF98F2E0016C79B /* ExpressionsView.swift */,
 				F0F1F5082BFAC96D0016C79B /* GraphView.swift */,
 				F003E2F52C05432B004E528C /* Expression */,
@@ -295,7 +292,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					F0F1F4C22BF93E9F0016C79B = {
 						CreatedOnToolsVersion = 15.3;
@@ -368,7 +365,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F1F50D2BFB1FD00016C79B /* GraphPanelView.swift in Sources */,
-				F0F1F4F82BF98FF60016C79B /* ScrollGradient.swift in Sources */,
 				F003E2F02C040F87004E528C /* GeneralSettingsView.swift in Sources */,
 				F003E2F22C040FA4004E528C /* ShortcutsSettingsView.swift in Sources */,
 				F003E2DD2C025859004E528C /* PanView.swift in Sources */,
@@ -486,6 +482,20 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
+				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
+				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
+				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -543,6 +553,20 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_UPCOMING_FEATURE_CONCISE_MAGIC_FILE = YES;
+				SWIFT_UPCOMING_FEATURE_DEPRECATE_APPLICATION_MAIN = YES;
+				SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_FORWARD_TRAILING_CLOSURES = YES;
+				SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_IMPLICIT_OPEN_EXISTENTIALS = YES;
+				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
+				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
+				SWIFT_UPCOMING_FEATURE_INTERNAL_IMPORTS_BY_DEFAULT = YES;
+				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -615,7 +639,6 @@
 		F0F1F4EC2BF93EA00016C79B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -635,7 +658,6 @@
 		F0F1F4ED2BF93EA00016C79B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -655,7 +677,6 @@
 		F0F1F4EF2BF93EA00016C79B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -673,7 +694,6 @@
 		F0F1F4F02BF93EA00016C79B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;

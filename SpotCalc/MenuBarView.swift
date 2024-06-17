@@ -15,11 +15,15 @@ struct MenuBarView: View {
         VStack {
             Section {
                 Button("Toggle window") {
-                    delegate.toggleWindow()
+                    Task {
+                        await AppDelegate.toggleWindow()
+                    }
                 }.keyboardShortcut(.space, modifiers: [.control, .option, .command])
                 
                 Button("Center window") {
-                    delegate.centerWindow()
+                    Task {
+                        await AppDelegate.centerWindow()
+                    }
                 }
                 
                 SettingsLink(label: {

@@ -1,5 +1,5 @@
+@preconcurrency import AppKit
 import SwiftUI
-import AppKit
 
 @main
 struct SpotCalcApp: App {
@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
             window.collectionBehavior = [.fullScreenAuxiliary, .moveToActiveSpace]
-            window.styleMask.insert([.resizable, .fullSizeContentView])
+            window.styleMask = [.resizable, .fullSizeContentView]
             window.invalidateShadow()
             window.makeKeyAndOrderFront(nil)
             
@@ -62,24 +62,30 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         event.modifierFlags.contains(.command) &&
         event.keyCode == 49 // space
     }
+    
+    @preconcurrency let registerHotkeyOptions: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
 
     func registerHotkey() {
-        let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-        let trusted = AXIsProcessTrustedWithOptions(options)
+        let trusted = AXIsProcessTrustedWithOptions(registerHotkeyOptions)
+        
         guard trusted else {
             print("App is not trusted for accessibility.")
             return
         }
 
-        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { (event) in
+        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { event in
             if self.checkToggleEvent(event: event) {
-                self.toggleWindow()
+                Task {
+                    await AppDelegate.toggleWindow()
+                }
             }
         }
         
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { (event) in
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             if self.checkToggleEvent(event: event) {
-                self.toggleWindow()
+                Task {
+                    await AppDelegate.toggleWindow()
+                }
                 return nil
             }
             
@@ -89,31 +95,39 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     
     func registerSpaceChangeMonitor() {
         NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.activeSpaceDidChangeNotification, object: nil, queue: OperationQueue.main) { notification in
-            self.hideWindow()
+            Task {
+                await AppDelegate.hideWindow()
+            }
         }
     }
     
-    func showWindow() {
-        window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+    static func showWindow() async {
+        if let window = await NSApp.windows.first {
+            await window.makeKeyAndOrderFront(nil)
+            await NSApp.activate(ignoringOtherApps: true)
+        }
     }
     
-    func hideWindow() {
-        window.orderOut(nil)
+    static func hideWindow() async {
+        if let window = await NSApp.windows.first {
+            await window.orderOut(nil)
+        }
     }
     
-    func centerWindow() {
-        if let window = NSApplication.shared.windows.first {
-            window.setContentSize(.init(width: 600, height: 400))
-            window.center()
+    static func centerWindow() async {
+        if let window = await NSApp.windows.first {
+            await window.setContentSize(.init(width: 600, height: 400))
+            await window.center()
         }
     }
 
-    func toggleWindow() {
-        if window.isVisible {
-            hideWindow()
-        } else {
-            showWindow()
+    static func toggleWindow() async {
+        if let window = await NSApp.windows.first {
+            if await window.isVisible {
+                await AppDelegate.hideWindow()
+            } else {
+                await AppDelegate.showWindow()
+            }
         }
     }
 }

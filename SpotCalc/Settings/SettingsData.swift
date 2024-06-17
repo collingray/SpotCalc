@@ -92,10 +92,10 @@ class AppearanceSettingsData {
 
 @Observable
 class DefinitionsSettingsData {
-    var functionDefinitions: [String: Expression]
-    var variableDefinitions: [String: Expression]
+    var functionDefinitions: [String: any Expression]
+    var variableDefinitions: [String: any Expression]
 
-    init(functionDefinitions: [String : Expression] = [:], variableDefinitions: [String : Expression] = [:]) {
+    init(functionDefinitions: [String : any Expression] = [:], variableDefinitions: [String : any Expression] = [:]) {
         self.functionDefinitions = functionDefinitions
         self.variableDefinitions = variableDefinitions
     }

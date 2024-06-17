@@ -129,7 +129,7 @@ struct ExpressionView: View {
                         .help("Copy to clipboard")
                     
                     Button(action: {
-                        expression.toggleGraph()
+                        data.toggleGraph(id: expression.id)
                     }) {
                         if let graphColor = expression.graphColor { // color is only present when graphed
                             Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")

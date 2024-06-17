@@ -14,15 +14,33 @@ import Combine
 class ExpressionData {
     private(set) var expressions: [DisplayExpression]
     
-    var variables: [String : Expression] = [:]
-    var functions: [String : ([Expression]) -> Expression?] = [:]
+    var variables: [String : any Expression] = [:]
+    var functions: [String : ([any Expression]) -> (any Expression)?] = [:]
     var values: [Int : BigDecimal] = [:]
     var overwritten: Set<Int> = Set()
     
-    var externalVariables: [String : Expression]
-    var externalFunctions: [String : ([Expression]) -> Expression?]
+    var externalVariables: [String : any Expression]
+    var externalFunctions: [String : ([any Expression]) -> (any Expression)?]
     
-    init(_ exprs: [DisplayExpression] = [], _ externalVariables: [String : Expression] = [:], _ externalFunctions: [String : ([Expression]) -> Expression?] = [:]) {
+    // total number of expressions that have been added, including expressions that have been deleted
+    var expression_count = 0
+    
+    let graph_colors: [Color] = [
+        .red,        
+        .blue,
+        .green,
+        .orange,
+        .purple,
+        .mint,
+        .indigo,
+        .gray,
+        .cyan,
+        .yellow,
+        .brown,
+        .pink,
+    ]
+    
+    init(_ exprs: [DisplayExpression] = [], _ externalVariables: [String : any Expression] = [:], _ externalFunctions: [String : ([any Expression]) -> (any Expression)?] = [:]) {
         self.expressions = exprs
         
         self.externalVariables = externalVariables
@@ -42,8 +60,8 @@ class ExpressionData {
     }
     
     func updateData() {
-        var vars: [String : Expression] = externalVariables
-        var funcs: [String : ([Expression]) -> Expression?] = externalFunctions
+        var vars: [String : any Expression] = externalVariables
+        var funcs: [String : ([any Expression]) -> (any Expression)?] = externalFunctions
         
         values = [:]
         overwritten = Set()
@@ -81,8 +99,9 @@ class ExpressionData {
     }
     
     func addExpression(_ expression: String) throws {
-        let expr = try DisplayExpression(expression, variables: variables)
+        let expr = try DisplayExpression(expression, id: expression_count, variables: variables)
         expressions.append(expr)
+        expression_count += 1
         
         updateData()
     }
@@ -106,6 +125,21 @@ class ExpressionData {
         
         updateData()
     }
+    
+    func toggleGraph(id: Int) {
+        if let i = expressions.firstIndex(where: {$0.id == id}) {
+            if expressions[i].isGraphed {
+                expressions[i].disableGraph()
+            } else {
+                // find first color in 'graph_colors' that is not currently used by any graph
+                if let color = graph_colors.first(where: { c in
+                    !expressions.contains(where: { $0.graphColor == c })
+                }) {
+                    expressions[i].enableGraph(color)
+                }
+            }
+        }
+    }
 }
 
 @Observable
@@ -126,7 +160,7 @@ class DisplayExpression: ParsedExpression {
     
     var definitionLatex: String? {
         if let name = name {
-            if let ast = ast as? Definition {
+            if let ast = ast as? any Definition {
                 return "\(ast.renderLatexDefinition()) ="
             } else if let params = parameters {
                 return "\(name)(\(params.joined(separator: ","))) ="
@@ -139,50 +173,21 @@ class DisplayExpression: ParsedExpression {
     }
     
     var bodyLatex: String? {
-        if let expression = ast as? Definition? {
+        if let expression = ast as? (any Definition)? {
             return expression?.body.renderLatex()
         } else {
             return ast?.renderLatex()
         }
     }
     
-    static let possible_colors: [Color] = [
-        .pink,
-        .brown,
-        .yellow,
-        .cyan,
-        .gray,
-        .indigo,
-        .mint,
-        .purple,
-        .orange,
-        .green,
-        .blue,
-        .red,
-    ]
-    static var available_colors: [Color] = possible_colors
-    
-    func toggleGraph() {
-        if isGraphed {
-            disableGraph()
-        } else {
-            enableGraph()
-        }
-    }
-    
-    func enableGraph() {
+    func enableGraph(_ color: Color) {
         if isGraphable {
-            if let color = DisplayExpression.available_colors.popLast() {
-                graphColor = color
-            }
+            graphColor = color
         }
     }
     
     func disableGraph() {
-        if let color = graphColor {
-            DisplayExpression.available_colors.append(color)
-            graphColor = nil
-        }
+        graphColor = nil
     }
 }
 
@@ -190,16 +195,16 @@ class DisplayExpression: ParsedExpression {
 class ParsedExpression: Identifiable {
     let id: Int
     
-    var ast: Expression?
+    var ast: (any Expression)?
     var expressionString: String
     var parameters: [String]?
-    var function: (([Expression]) -> Expression?)?
+    var function: (([any Expression]) -> (any Expression)?)?
     
     var name: String? {
         if isError {
             return nil
         } else {
-            if let ast = ast as? Definition {
+            if let ast = ast as? any Definition {
                 return ast.name
             } else {
                 return "\(isFunc ? "f" : "x")_{\(id.description)}"
@@ -215,11 +220,8 @@ class ParsedExpression: Identifiable {
         parameters != nil
     }
     
-    static var total_count = 0
-    
-    init(_ expression: String, variables: [String : Expression] = [:]) throws {
-        id = ParsedExpression.total_count
-        ParsedExpression.total_count += 1
+    init(_ expression: String, id: Int, variables: [String : any Expression] = [:]) throws {
+        self.id = id
         
         expressionString = expression
         let parser = Parser(expression: expression)
@@ -238,7 +240,7 @@ class ParsedExpression: Identifiable {
         }
     }
     
-    func updateExpression(_ newExpression: String, variables: [String : Expression] = [:]) {
+    func updateExpression(_ newExpression: String, variables: [String : any Expression] = [:]) {
         if newExpression != expressionString {
             expressionString = newExpression
             let parser = Parser(expression: expressionString)
@@ -258,7 +260,7 @@ class ParsedExpression: Identifiable {
         }
     }
     
-    func eval(_ variables: [String: Expression], _ functions: [String : ([Expression]) -> Expression?]) -> BigDecimal? {
+    func eval(_ variables: [String: any Expression], _ functions: [String : ([any Expression]) -> (any Expression)?]) -> BigDecimal? {
         return ast?.eval(variables, functions)
     }
 }
