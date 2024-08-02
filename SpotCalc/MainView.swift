@@ -56,6 +56,6 @@ struct VisualEffectView: NSViewRepresentable {
     func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }
 
-//#Preview {
-//    MainView()
-//}
+#Preview {
+    MainView()
+}

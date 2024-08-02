@@ -114,8 +114,6 @@ struct ExpressionView: View {
             
             if hovered {
                 HStack {
-                    Spacer()
-                    
                     Button(action: {
                         let pasteboard = NSPasteboard.general
                         pasteboard.clearContents()

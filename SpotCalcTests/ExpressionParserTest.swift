@@ -10,7 +10,7 @@ class ComplexExpressionTests: XCTestCase {
         XCTAssertEqual(parser.tokens, expected)
     }
     
-    func testExpression(_ expressionString: String, expected: Float, variables: [String: Expression] = [:],  functions: [String : ([Expression]) -> Expression?] = [:]) {
+    func testExpression(_ expressionString: String, expected: Float, variables: [String: any SpotCalc.Expression] = [:],  functions: [String : ([any SpotCalc.Expression]) -> (any SpotCalc.Expression)?] = [:]) {
         let parser = Parser(expression: expressionString)
         do {
             let expr = try parser.parse()

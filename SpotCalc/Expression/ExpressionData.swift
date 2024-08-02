@@ -127,6 +127,7 @@ class ExpressionData {
     }
     
     func toggleGraph(id: Int) {
+        print("Toggling graph \(id)")
         if let i = expressions.firstIndex(where: {$0.id == id}) {
             if expressions[i].isGraphed {
                 expressions[i].disableGraph()

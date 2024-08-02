@@ -95,29 +95,6 @@ struct GraphView: View {
                             dyMin = 0
                             dyMax = 0
                         }
-//                ).highPriorityGesture(
-//                    DragGesture()
-//                        .onChanged { value in
-//                            let dx = -Double(value.translation.width / proxy.size.width) * (xMax - xMin)
-//                            let dy = Double(value.translation.height / proxy.size.height) * (yMax - yMin)
-//                            dxMin = dx
-//                            dxMax = dx
-//                            dyMin = dy
-//                            dyMax = dy
-//                            print("dragging")
-//                        }
-//                        .onEnded { value in
-//                            xMin += dxMin
-//                            xMax += dxMax
-//                            yMin += dyMin
-//                            yMax += dyMax
-//                            
-//                            dxMin = 0
-//                            dxMax = 0
-//                            dyMin = 0
-//                            dyMax = 0
-//                            print("dragging done")
-//                        }
                 ).onAppear {
                     yMin = xMin * Double(proxy.size.height / proxy.size.width)
                     yMax = xMax * Double(proxy.size.height / proxy.size.width)
@@ -168,12 +145,13 @@ struct ChartView: View {
     }
     
     var body: some View {
-        Chart(plotData, id: \.self.0) {
-            LineMark(
-                x: .value("x", $0.1),
-                y: .value("y", $0.2),
-                series: .value("num", $0.0)
-            ).foregroundStyle($0.3)
+        Chart {
+            LinePlot(
+                plotData,
+                x: .value("x",\.1),
+                y: .value("y", \.2),
+                series: .value("num", \.0)
+            ).foregroundStyle(\.3)
         }
     }
 }

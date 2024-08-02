@@ -20,6 +20,7 @@ struct ContentView: View {
                 GraphPanelView()
                     .frame(width: 400)
                     .transition(.move(edge: .trailing))
+                    .zIndex(-1) // Necessary to ensure overdrawn graph points do not interfere with equation button hitboxes
             }
         }
         .environment(data)
