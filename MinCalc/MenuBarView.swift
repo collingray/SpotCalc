@@ -1,6 +1,6 @@
 //
 //  MenuBarView.swift
-//  SpotCalc
+//  MinCalc
 //
 //  Created by Collin Gray on 5/25/24.
 //
@@ -11,7 +11,7 @@ struct MenuBarView: View {
     let delegate: AppDelegate
     
     var body: some View {
-        Text("SpotCalc")
+        Text("MinCalc")
         VStack {
             Section {
                 Button("Toggle window") {
@@ -31,7 +31,7 @@ struct MenuBarView: View {
                 }).keyboardShortcut(",")
             }
             Section {
-                Button("Quit SpotCalc") {
+                Button("Quit MinCalc") {
                     NSApplication.shared.terminate(nil)
                 }.keyboardShortcut(KeyEquivalent("q"), modifiers: .command)
             }

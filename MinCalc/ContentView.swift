@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  SpotCalc
+//  MinCalc
 //
 //  Created by Collin Gray on 5/19/24.
 //

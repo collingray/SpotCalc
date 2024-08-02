@@ -1,6 +1,6 @@
 //
 //  ExpressionTypes.swift
-//  SpotCalc
+//  MinCalc
 //
 //  Created by Collin Gray on 5/18/24.
 //

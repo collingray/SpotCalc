@@ -1,13 +1,13 @@
 //
-//  SpotCalcUITestsLaunchTests.swift
-//  SpotCalcUITests
+//  MinCalcUITestsLaunchTests.swift
+//  MinCalcUITests
 //
 //  Created by Collin Gray on 5/18/24.
 //
 
 import XCTest
 
-final class SpotCalcUITestsLaunchTests: XCTestCase {
+final class MinCalcUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

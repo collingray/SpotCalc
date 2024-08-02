@@ -1,4 +1,4 @@
-# SpotCalc
+# MinCalc
 ### A Desmos-like graphing calculator for macOS
 
 *Still a WIP*

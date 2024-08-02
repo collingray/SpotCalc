@@ -1,7 +1,7 @@
 import XCTest
 import Foundation
 
-@testable import SpotCalc
+@testable import MinCalc
 
 class ComplexExpressionTests: XCTestCase {
     
@@ -10,7 +10,7 @@ class ComplexExpressionTests: XCTestCase {
         XCTAssertEqual(parser.tokens, expected)
     }
     
-    func testExpression(_ expressionString: String, expected: Float, variables: [String: any SpotCalc.Expression] = [:],  functions: [String : ([any SpotCalc.Expression]) -> (any SpotCalc.Expression)?] = [:]) {
+    func testExpression(_ expressionString: String, expected: Float, variables: [String: any MinCalc.Expression] = [:],  functions: [String : ([any MinCalc.Expression]) -> (any MinCalc.Expression)?] = [:]) {
         let parser = Parser(expression: expressionString)
         do {
             let expr = try parser.parse()

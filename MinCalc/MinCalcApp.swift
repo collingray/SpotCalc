@@ -2,7 +2,7 @@
 import SwiftUI
 
 @main
-struct SpotCalcApp: App {
+struct MinCalcApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @AppStorage("showMenuBarExtra") private var showMenuBarExtra = true
     @State private var settingsData = SettingsData()
@@ -21,7 +21,7 @@ struct SpotCalcApp: App {
                 .environment(settingsData)
         }
         
-        MenuBarExtra("SpotCalc Menu Bar", systemImage: "function") {
+        MenuBarExtra("MinCalc Menu Bar", systemImage: "function") {
             MenuBarView(delegate: appDelegate)
         }
     }

@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  SpotCalc
+//  MinCalc
 //
 //  Created by Collin Gray on 5/25/24.
 //
